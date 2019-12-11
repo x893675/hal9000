@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeter
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: greeter-srv
+    spec:
+      containers:
+        - name: greeter
+          imagePullPolicy: IfNotPresent
+          args:
+            - --server_address=0.0.0.0:8080
+          image: hanamichi/hal9000-srv:latest
+          ports:
+            - containerPort: 8080
+              name: greeter-port
