@@ -4,6 +4,9 @@ metadata:
   name: greeter-api
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: greeter-api
   template:
     metadata:
       labels:
