@@ -13,7 +13,7 @@ import (
 
 func main(){
 	service := k8s.NewService(
-		micro.Name("greeter"),
+		micro.Name("go.micro.srv.greeter"),
 		micro.RegisterTTL(time.Second*30),
 		micro.RegisterInterval(time.Second*10),
 	)
