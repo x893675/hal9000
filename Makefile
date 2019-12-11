@@ -12,9 +12,9 @@ docker:
 	docker build -t hanamichi/hal9000-api:latest -f build/api/Dockerfile .
 	docker build -t hanamichi/hal9000-srv:latest -f build/greeter/Dockerfile .
 	docker push hanamichi/hal9000-api:latest
-	docker push hanamichi/hal9000-api:latest
+	docker push hanamichi/hal9000-srv:latest
 
 .PHONY: clean
 clean:
 	docker rmi hanamichi/hal9000-api:latest
-	docker rmi hanamichi/hal9000-api:latest
+	docker rmi hanamichi/hal9000-srv:latest

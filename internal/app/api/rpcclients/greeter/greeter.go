@@ -6,5 +6,5 @@ import (
 )
 
 func NewGreeterClient() greeter.GreeterService{
-	return greeter.NewGreeterService("go.micro.srv.greeter", client.DefaultClient)
+	return greeter.NewGreeterService("greeter", client.DefaultClient)
 }
