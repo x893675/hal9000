@@ -171,6 +171,7 @@ github.com/micro/go-plugins/registry/kubernetes
 github.com/micro/go-plugins/registry/kubernetes/client
 github.com/micro/go-plugins/registry/kubernetes/client/api
 github.com/micro/go-plugins/registry/kubernetes/client/watch
+github.com/micro/go-plugins/transport/grpc
 # github.com/micro/mdns v0.3.0
 github.com/micro/mdns
 # github.com/miekg/dns v1.1.22
