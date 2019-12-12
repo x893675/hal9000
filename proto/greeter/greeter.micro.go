@@ -58,6 +58,8 @@ func NewGreeterService(name string, c client.Client) GreeterService {
 func (c *greeterService) SayHello(ctx context.Context, in *SayRequest, opts ...client.CallOption) (*SayResp, error) {
 	req := c.c.NewRequest(c.name, "Greeter.SayHello", in)
 	out := new(SayResp)
+	fmt.Println(req.Endpoint())
+	fmt.Println(req.Service())
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err

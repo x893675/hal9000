@@ -4,7 +4,7 @@ apps = 'api' 'greeter'
 build:
 	for app in $(apps) ;\
 	do \
-		CGO_ENABLED=0 go build -o dist/$$app -a -installsuffix cgo -ldflags '-w -s' ./cmd/$$app;\
+		CGO_ENABLED=0 go build -o dist/$$app -mod vendor -a -installsuffix cgo -ldflags '-w -s' ./cmd/$$app;\
 	done
 
 .PHONY: docker

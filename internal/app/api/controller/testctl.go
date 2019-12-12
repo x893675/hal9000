@@ -30,7 +30,7 @@ func (t *TestController)Hello(c *gin.Context){
 		fmt.Println("err is ", err.Error())
 		ginplus.ResJSON(c, 200, ginplus.HTTPError{Error: ginplus.HTTPErrorItem{
 			Code:    500,
-			Message: "rpcerror",
+			Message: err.Error(),
 		}})
 		return
 	}

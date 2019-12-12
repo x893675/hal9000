@@ -14,7 +14,7 @@ import (
 
 func main(){
 	service := k8s.NewService(
-		web.Name("hal9000-api"),
+		web.Name("greeter-api"),
 	)
 	service.Handle("/", InitWeb())
 	_ = service.Init(
