@@ -6,18 +6,21 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: greeter-srv
+      app: greeter
   template:
     metadata:
       labels:
-        app: greeter-srv
+        app: greeter
     spec:
       containers:
         - name: greeter
+          env:
+            name: MICRO_SELECTOR
+            value: static
           imagePullPolicy: IfNotPresent
           args:
             - --server_address=0.0.0.0:8080
-          image: hanamichi/hal9000-srv:latest
+          image: hanamichi/hal9000-srv:k8s
           ports:
             - containerPort: 8080
               name: greeter-port

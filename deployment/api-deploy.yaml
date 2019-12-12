@@ -14,6 +14,9 @@ spec:
     spec:
       containers:
         - name: greeter-api
+          env:
+            name: MICRO_SELECTOR
+            value: static
           imagePullPolicy: IfNotPresent
           args:
             - --server_address=0.0.0.0:8080
