@@ -11,5 +11,9 @@ import (
 func NewGreeterClient() greeter.GreeterService{
 	k := kubernetes.NewRegistry()
 	st := static.NewSelector()
-	return greeter.NewGreeterService("greeter", client.NewClient(client.Registry(k),client.Selector(st),client.Transport(grpc.NewTransport())))
+	return greeter.NewGreeterService("greeter", client.NewClient(
+		client.Registry(k),
+		client.Selector(st),
+		client.Transport(grpc.NewTransport(),
+	)))
 }
