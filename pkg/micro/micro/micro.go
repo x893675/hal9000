@@ -2,6 +2,8 @@ package micro
 
 import (
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/client"
+	grpcclient "github.com/micro/go-micro/client/grpc"
 	"github.com/micro/go-micro/service/grpc"
 	"github.com/micro/go-plugins/registry/kubernetes"
 
@@ -27,4 +29,20 @@ func NewService(opts ...micro.Option) micro.Service {
 
 	// return a micro.Service
 	return grpc.NewService(options...)
+}
+
+
+func NewClient(opts ...client.Option) client.Client{
+	r := kubernetes.NewRegistry()
+	s := static.NewSelector()
+
+	// set the registry and selector
+	options := []client.Option{
+		client.Registry(r),
+		client.Selector(s),
+	}
+
+	options = append(options, opts...)
+
+	return grpcclient.NewClient(options...)
 }
