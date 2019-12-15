@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeter-api
+spec:
+  selector:
+    matchLabels:
+      app: greeter-api
+  template:
+    metadata:
+      labels:
+        app: greeter-api
+    spec:
+      containers:
+      - args:
+        - --server_address=0.0.0.0:8080
+        env:
+        - name: MICRO_SELECTOR
+          value: static
+        image: hanamichi/hal9000-api:k8s
+        imagePullPolicy: IfNotPresent
+        name: greeter-api
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: greeter-api
+  name: greeter-api
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: greeter-api
+  type: ClusterIP
