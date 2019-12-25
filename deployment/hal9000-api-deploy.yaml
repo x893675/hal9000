@@ -1,26 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: greeter
+  name: hal9000-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: greeter
+      app: hal9000-api
   template:
     metadata:
       labels:
-        app: greeter
+        app: hal9000-api
     spec:
       containers:
-        - name: greeter
+        - name: hal9000-api
           env:
             name: MICRO_SELECTOR
             value: static
           imagePullPolicy: IfNotPresent
           args:
             - --server_address=0.0.0.0:8080
-          image: hanamichi/hal9000-srv:k8s
+          image: hanamichi/hal9000-api:k8s
           ports:
             - containerPort: 8080
-              name: greeter-port
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hal9000-api
+  labels:
+    app: hal9000-api
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: hal9000-api
