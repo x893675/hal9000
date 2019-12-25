@@ -7,7 +7,7 @@ VERSION ?= $(shell git rev-parse --short HEAD)-$(shell date -u '+%Y%m%d%I%M%S')
 build:
 	for app in $(apps) ;\
 	do \
-		CGO_ENABLED=0 go build -o dist/$$app -mod vendor -a -installsuffix cgo -ldflags "-w -s -X internal/app/$$app/version.VERSION=$$VERSION" ./cmd/$$app;\
+		CGO_ENABLED=0 go build -o dist/$$app -mod vendor -a -installsuffix cgo -ldflags "-w -s -X hal9000/internal/app/$$app/version.Version=$$VERSION" ./cmd/$$app;\
 	done
 
 .PHONY: build-image

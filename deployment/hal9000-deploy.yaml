@@ -15,8 +15,8 @@ spec:
       containers:
         - name: hal9000
           env:
-            name: MICRO_SELECTOR
-            value: static
+            - name: MICRO_SELECTOR
+              value: static
           imagePullPolicy: IfNotPresent
           args:
             - --server_address=0.0.0.0:8080
