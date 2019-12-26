@@ -1,6 +1,7 @@
 package greeter
 
 import (
+	"hal9000/internal/app/api/config"
 	"hal9000/pkg/micro/micro"
 	"hal9000/proto/greeter"
 )
@@ -42,5 +43,5 @@ import (
 //}
 
 func NewGreeterClient()greeter.GreeterService{
-	return greeter.NewGreeterService("greeter", micro.NewClient())
+	return greeter.NewGreeterService(config.GreeterServiceName, micro.NewClient())
 }

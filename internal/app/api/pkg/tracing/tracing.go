@@ -21,5 +21,5 @@ func StartSpanWithCtx(ctx context.Context, operationName string, tags map[string
 }
 
 func InjectTraceToRpcMetaData() context.Context{
-
+	return nil
 }
