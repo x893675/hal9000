@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"hal9000/internal/app/api/pkg/ginplus"
+	"hal9000/internal/app/api/pkg/tracing"
 	"hal9000/proto/greeter"
 )
 
@@ -19,15 +19,20 @@ func NewTestController(greeterclient greeter.GreeterService)*TestController{
 
 
 func (t *TestController)Hello(c *gin.Context){
+	ctx := ginplus.StartChildSpan(c, "TestController.Hello", tracing.Tags{
+		"api": "/api/v1/hello/:id",
+	})
 	item := c.Param("id")
 	if item == ""{
 		item = "greeter"
 	}
-	result, err := t.greeterClient.SayHello(context.TODO(), &greeter.SayRequest{
+
+	result, err := t.greeterClient.SayHello(ginplus.InjectJaegerTraceToRpcMetaData(c), &greeter.SayRequest{
 		Msg: item,
 	})
 	if err != nil {
 		fmt.Println("err is ", err.Error())
+		ginplus.FinishSpan(ctx)
 		ginplus.ResJSON(c, 200, ginplus.HTTPError{Error: ginplus.HTTPErrorItem{
 			Code:    500,
 			Message: err.Error(),
@@ -35,5 +40,6 @@ func (t *TestController)Hello(c *gin.Context){
 		return
 	}
 	fmt.Println(result.Rsp)
+	ginplus.FinishSpan(ctx)
 	ginplus.ResOK(c)
 }
