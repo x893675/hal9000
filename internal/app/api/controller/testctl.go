@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"hal9000/internal/app/api/pkg/ginplus"
-	"hal9000/internal/app/api/pkg/tracing"
+	"hal9000/pkg/tracing"
 	"hal9000/proto/greeter"
 )
 

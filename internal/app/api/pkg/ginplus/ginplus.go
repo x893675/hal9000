@@ -7,7 +7,7 @@ import (
 	"github.com/micro/go-micro/metadata"
 	ot "github.com/opentracing/opentracing-go"
 	"hal9000/internal/app/api/pkg/errors"
-	"hal9000/internal/app/api/pkg/tracing"
+	"hal9000/pkg/tracing"
 	"hal9000/pkg/util"
 	"net/http"
 )
