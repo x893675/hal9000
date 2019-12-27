@@ -27,8 +27,8 @@ func main(){
 
 	ep, _ := entrypoint.Initialize()
 
-	_ = trace.New()
-
+	cacelFn := trace.New()
+	defer cacelFn.Close()
 	go func() {
 		reloadSignal := make(chan os.Signal)
 		signal.Notify(reloadSignal, syscall.SIGHUP)

@@ -3,10 +3,11 @@ package trace
 import (
 	"hal9000/internal/app/api/config"
 	"hal9000/pkg/tracing"
+	"io"
 	"log"
 )
 
-func New() error {
+func New() (io.Closer) {
 	if !config.EnableTrace {
 		return nil
 	}
@@ -17,20 +18,16 @@ func New() error {
 	}
 	if err := traceOpts.Validate(); err != nil {
 		log.Println("Invalid options for tracing: ", err)
-		return err
+		return nil
 	}
 
 	if traceOpts.TracingEnabled() {
 		tracer, err := tracing.Configure(config.ServiceName, traceOpts)
-		defer func() {
-			if tracer != nil {
-				_ = tracer.Close()
-			}
-		}()
 		if err != nil {
 			log.Println("Failed to configure tracing: ", err)
-			return err
+			return nil
 		}
+		return tracer
 	}
 	return nil
 }
