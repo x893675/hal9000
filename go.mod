@@ -5,8 +5,10 @@ go 1.13
 require (
 	github.com/VividCortex/gohistogram v1.0.0 // indirect
 	github.com/gin-gonic/gin v1.5.0
+	github.com/gogo/protobuf v1.3.1
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/protobuf v1.3.2
+	github.com/google/uuid v1.1.1
 	github.com/google/wire v0.3.0
 	github.com/json-iterator/go v1.1.8
 	github.com/micro/go-micro v1.18.0
