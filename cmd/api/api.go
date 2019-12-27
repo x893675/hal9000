@@ -10,10 +10,10 @@ import (
 	"hal9000/internal/app/api/controller"
 	"hal9000/internal/app/api/middleware"
 	"hal9000/internal/app/api/rpcclients/greeter"
+	"hal9000/internal/app/api/trace"
 	"hal9000/internal/app/api/version"
 	"hal9000/pkg/entrypoint"
 	k8s "hal9000/pkg/micro/web"
-	"hal9000/pkg/tracing"
 	"log"
 	"os"
 	"os/signal"
@@ -27,23 +27,7 @@ func main(){
 
 	ep, _ := entrypoint.Initialize()
 
-	traceOpts := &tracing.Options{
-		ZipkinURL: config.TraceUrl,
-		SamplingRate: 1.0,
-	}
-	if err := traceOpts.Validate(); err != nil {
-		log.Fatal("Invalid options for tracing: ", err)
-	}
-
-	if traceOpts.TracingEnabled() {
-		tracer, err := tracing.Configure("api", traceOpts)
-		if err != nil {
-			tracer.Close()
-			log.Fatal("Failed to configure tracing: ", err)
-		} else {
-			defer tracer.Close()
-		}
-	}
+	_ = trace.New()
 
 	go func() {
 		reloadSignal := make(chan os.Signal)

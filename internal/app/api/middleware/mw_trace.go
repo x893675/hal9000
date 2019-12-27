@@ -25,7 +25,7 @@ func TraceMiddleware(skipper ...SkipperFunc) gin.HandlerFunc{
 		}
 		inBoundSpanCtx, err := ot.GlobalTracer().Extract(ot.HTTPHeaders, ot.HTTPHeadersCarrier(c.Request.Header))
 		if err != nil {
-			log.Panicln(err.Error())
+			log.Println(err.Error())
 			c.Next()
 			return
 		}
