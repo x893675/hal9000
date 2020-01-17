@@ -24,7 +24,6 @@ import (
 //	)))
 //}
 
-
 //import (
 //	"github.com/micro/go-micro/client"
 //	"github.com/micro/go-micro/client/grpc"
@@ -42,6 +41,6 @@ import (
 //		)
 //}
 
-func NewGreeterClient()greeter.GreeterService{
+func NewGreeterClient() greeter.GreeterService {
 	return greeter.NewGreeterService(config.GreeterServiceName, micro.NewClient())
 }

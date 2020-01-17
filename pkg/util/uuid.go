@@ -1,7 +1,7 @@
 package util
 
 import (
-"github.com/google/uuid"
+	"github.com/google/uuid"
 )
 
 // MustUUID 创建UUID，如果发生错误则抛出panic
@@ -21,4 +21,3 @@ func NewUUID() (string, error) {
 	}
 	return v.String(), nil
 }
-

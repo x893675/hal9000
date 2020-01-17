@@ -1,6 +1,5 @@
 package tracing
 
-
 import (
 	"fmt"
 	"github.com/golang/glog"
@@ -12,9 +11,6 @@ import (
 	"github.com/uber/jaeger-client-go/transport"
 	"github.com/uber/jaeger-client-go/transport/zipkin"
 	zk "github.com/uber/jaeger-client-go/zipkin"
-
-
-
 )
 
 /* TODO:

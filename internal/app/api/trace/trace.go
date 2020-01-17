@@ -12,7 +12,7 @@ func New() error {
 	}
 
 	traceOpts := &tracing.Options{
-		ZipkinURL: config.TraceUrl,
+		ZipkinURL:    config.TraceUrl,
 		SamplingRate: 1.0,
 	}
 	if err := traceOpts.Validate(); err != nil {

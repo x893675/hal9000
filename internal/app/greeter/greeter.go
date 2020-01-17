@@ -7,15 +7,13 @@ import (
 )
 
 type GreeterServer struct {
-
 }
 
-func NewGreeterServer()*GreeterServer{
+func NewGreeterServer() *GreeterServer {
 	return &GreeterServer{}
 }
 
-
-func(g *GreeterServer)SayHello(ctx context.Context, in *greeter.SayRequest, out *greeter.SayResp) error {
+func (g *GreeterServer) SayHello(ctx context.Context, in *greeter.SayRequest, out *greeter.SayResp) error {
 	fmt.Println(in.Msg)
 	out.Rsp = "world"
 	return nil

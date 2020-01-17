@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-var(
+var (
 	mu                    sync.Mutex
 	reloadCh              = make(chan struct{})
 	shutdownCtx           context.Context
@@ -16,19 +16,18 @@ var(
 	ep                    *EntryPoint
 )
 
-
 func init() {
 	shutdownCtx, cancelFn = context.WithCancel(context.Background())
 }
 
-func Initialize()(*EntryPoint, error){
+func Initialize() (*EntryPoint, error) {
 	mu.Lock()
 	defer mu.Unlock()
 	if ep != nil {
 		return nil, errAlreadyInitialized
 	}
 	ep = &EntryPoint{}
-	return ep,nil
+	return ep, nil
 }
 
 // OnShutdown subscribe on shutdown event for gracefully exit via context.

@@ -1,6 +1,5 @@
 package tracing
 
-
 import (
 	"errors"
 )

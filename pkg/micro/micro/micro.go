@@ -31,8 +31,7 @@ func NewService(opts ...micro.Option) micro.Service {
 	return grpc.NewService(options...)
 }
 
-
-func NewClient(opts ...client.Option) client.Client{
+func NewClient(opts ...client.Option) client.Client {
 	r := kubernetes.NewRegistry()
 	s := static.NewSelector()
 

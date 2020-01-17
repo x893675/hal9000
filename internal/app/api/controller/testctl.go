@@ -12,18 +12,16 @@ type TestController struct {
 	greeterClient greeter.GreeterService
 }
 
-
-func NewTestController(greeterclient greeter.GreeterService)*TestController{
-	return &TestController{greeterClient:greeterclient}
+func NewTestController(greeterclient greeter.GreeterService) *TestController {
+	return &TestController{greeterClient: greeterclient}
 }
 
-
-func (t *TestController)Hello(c *gin.Context){
+func (t *TestController) Hello(c *gin.Context) {
 	ctx := ginplus.StartChildSpan(c, "TestController.Hello", tracing.Tags{
 		"api": "/api/v1/hello/:id",
 	})
 	item := c.Param("id")
-	if item == ""{
+	if item == "" {
 		item = "greeter"
 	}
 

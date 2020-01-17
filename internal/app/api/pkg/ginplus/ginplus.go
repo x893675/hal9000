@@ -16,19 +16,19 @@ import (
 const (
 	prefix = "hal9000"
 	// ResBodyKey 存储上下文中的键(响应Body数据)
-	ResBodyKey = prefix + "/res_body"
+	ResBodyKey   = prefix + "/res_body"
 	RootTraceCtx = prefix + "/rootTrace_ctx"
 	RequestIDKey = prefix + "/request_id"
 )
 
 var jaegerTraceHeaderDict = map[string]string{
-	"x-request-id" : "X-Request-Id",
-	"x-b3-traceid" : "X-B3-Traceid",
-	"x-b3-spanid"  : "X-B3-Spanid",
-	"x-b3-sampled" : "X-B3-Sampled",
-	"x-b3-parentspanid" : "X-B3-Parentspanid",
-	"x-b3-flags"   : "X-B3-Flags",
-	"x-ot-span-context" : "X-Ot-Span-Context",
+	"x-request-id":      "X-Request-Id",
+	"x-b3-traceid":      "X-B3-Traceid",
+	"x-b3-spanid":       "X-B3-Spanid",
+	"x-b3-sampled":      "X-B3-Sampled",
+	"x-b3-parentspanid": "X-B3-Parentspanid",
+	"x-b3-flags":        "X-B3-Flags",
+	"x-ot-span-context": "X-Ot-Span-Context",
 }
 
 // HTTPError HTTP响应错误
@@ -80,7 +80,6 @@ func ResJSON(c *gin.Context, status int, v interface{}) {
 	c.Abort()
 }
 
-
 // ResError 响应错误
 func ResError(c *gin.Context, err error, status ...int) {
 	statusCode := 500
@@ -109,9 +108,9 @@ func ResError(c *gin.Context, err error, status ...int) {
 	ResJSON(c, statusCode, HTTPError{Error: errItem})
 }
 
-func StartChildSpan(c *gin.Context, operationName string, tags tracing.Tags)  context.Context{
-	if rootTranceCtx, ok := c.Get(RootTraceCtx); ok{
-		if ctx, ok := rootTranceCtx.(ot.SpanContext); ok{
+func StartChildSpan(c *gin.Context, operationName string, tags tracing.Tags) context.Context {
+	if rootTranceCtx, ok := c.Get(RootTraceCtx); ok {
+		if ctx, ok := rootTranceCtx.(ot.SpanContext); ok {
 			span := ot.StartSpan(operationName, ot.ChildOf(ctx), ot.Tags(tags))
 			ctx := ot.ContextWithSpan(context.Background(), span)
 			return ctx
@@ -127,9 +126,9 @@ func FinishSpan(ctx context.Context) {
 	}
 }
 
-func InjectJaegerTraceToRpcMetaData(c *gin.Context) context.Context{
+func InjectJaegerTraceToRpcMetaData(c *gin.Context) context.Context {
 	md := make(map[string]string)
-	for k, v := range jaegerTraceHeaderDict{
+	for k, v := range jaegerTraceHeaderDict {
 		if temp := c.GetHeader(v); temp != "" {
 			md[k] = temp
 		}

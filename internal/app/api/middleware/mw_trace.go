@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-func TraceMiddleware(skipper ...SkipperFunc) gin.HandlerFunc{
+func TraceMiddleware(skipper ...SkipperFunc) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if len(skipper) > 0 && skipper[0](c) {
 			c.Next()

@@ -21,9 +21,7 @@ import (
 	"time"
 )
 
-
-
-func main(){
+func main() {
 
 	ep, _ := entrypoint.Initialize()
 
@@ -40,7 +38,7 @@ func main(){
 	}()
 
 	go func() {
-		gracefulDelay := 50*time.Millisecond
+		gracefulDelay := 50 * time.Millisecond
 		shutdownSignal := make(chan os.Signal)
 		signal.Notify(shutdownSignal, syscall.SIGTERM, syscall.SIGINT)
 		sig := <-shutdownSignal
@@ -56,7 +54,7 @@ func main(){
 	)
 	service.Handle("/", InitWeb())
 	_ = service.Init(
-		web.Address("0.0.0.0:"+config.ServicePort),
+		web.Address("0.0.0.0:" + config.ServicePort),
 	)
 
 	log.Println("创建服务:名称:" + config.ServiceName + ",版本:" + version.Version)
@@ -78,7 +76,7 @@ func InitWeb() *gin.Engine {
 	return app
 }
 
-func CreateApiApplication()*api.ApiApplication{
+func CreateApiApplication() *api.ApiApplication {
 	greeterclient := greeter.NewGreeterClient()
 
 	testctl := controller.NewTestController(greeterclient)

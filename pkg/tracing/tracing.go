@@ -16,10 +16,10 @@ func StartSpanWithCtx(ctx context.Context, operationName string, tags map[string
 	if ot.GlobalTracer() == nil {
 		return nil
 	}
-	_, childCtx := ot.StartSpanFromContext(ctx,operationName,ot.Tags(tags))
+	_, childCtx := ot.StartSpanFromContext(ctx, operationName, ot.Tags(tags))
 	return childCtx
 }
 
-func InjectTraceToRpcMetaData() context.Context{
+func InjectTraceToRpcMetaData() context.Context {
 	return nil
 }

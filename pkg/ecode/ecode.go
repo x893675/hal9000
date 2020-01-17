@@ -1,6 +1,5 @@
 package ecode
 
-
 import (
 	"fmt"
 	"strconv"

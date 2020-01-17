@@ -12,9 +12,7 @@ import (
 	"time"
 )
 
-
-
-func main(){
+func main() {
 	service := k8s.NewService(
 		micro.Name(config.ServiceName),
 		micro.RegisterTTL(time.Second*30),
@@ -27,11 +25,11 @@ func main(){
 		server.Wait(nil),
 	)
 	service.Init(
-		micro.AfterStart(func()error{
+		micro.AfterStart(func() error {
 			log.Println("after start...")
 			return nil
 		}),
-		micro.AfterStop(func()error{
+		micro.AfterStop(func() error {
 			log.Println("after stop...")
 			return nil
 		}),
