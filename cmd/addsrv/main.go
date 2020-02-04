@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/sd/etcdv3"
+	"github.com/google/uuid"
 	"google.golang.org/grpc"
 	"hal9000/internal/addsrv"
 	"hal9000/pb"
@@ -22,17 +23,7 @@ import (
 var (
 	//etcd服务地址
 	etcdServer = "etcd:2379"
-	//服务的信息目录
-	prefix = "/hal9000/"
-	//当前启动服务实例的地址
-	instance = "127.0.0.1:50052"
-	//服务实例注册的路径
-	key = prefix + instance
-	//服务实例注册的val
-	value = instance
 	ctx   = context.Background()
-	//服务监听地址
-	serviceAddress = ":8891"
 )
 
 func main()  {
@@ -79,8 +70,10 @@ func main()  {
 	if err != nil {
 		panic(err)
 	}
+	prefix := "/hal9000/addsrv/"
+	instanceId := uuid.New().String()
 	register := etcdv3.NewRegistrar(client,etcdv3.Service{
-		Key: "/hal9000/addsrv/",
+		Key: prefix + "node-" + instanceId,
 		Value: gaddr,
 	},logger)
 	register.Register()

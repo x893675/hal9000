@@ -13,7 +13,7 @@ require (
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/protobuf v1.3.3
-	github.com/google/uuid v1.1.1 // indirect
+	github.com/google/uuid v1.1.1
 	go.etcd.io/etcd v3.3.18+incompatible // indirect
 	go.uber.org/zap v1.13.0 // indirect
 	google.golang.org/grpc v1.26.0

@@ -26,6 +26,7 @@ github.com/go-kit/kit/log
 github.com/go-kit/kit/sd
 github.com/go-kit/kit/sd/etcdv3
 github.com/go-kit/kit/sd/internal/instance
+github.com/go-kit/kit/sd/lb
 github.com/go-kit/kit/transport
 github.com/go-kit/kit/transport/grpc
 github.com/go-kit/kit/transport/http
