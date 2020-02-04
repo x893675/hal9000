@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"github.com/go-kit/kit/endpoint"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 	"google.golang.org/grpc"
 	"hal9000/internal/addsrv"
 	"hal9000/pb"
 	"io"
+	"time"
 )
 
 func New(conn *grpc.ClientConn) addsrv.AddService {
@@ -32,7 +34,13 @@ func New(conn *grpc.ClientConn) addsrv.AddService {
 
 
 func SumEndpointFactory(instanceAddr string) (endpoint.Endpoint, io.Closer, error) {
-	conn, err := grpc.Dial(instanceAddr, grpc.WithInsecure())
+	ctx, cancel := context.WithTimeout(context.Background(),
+		10000*time.Millisecond)
+	defer cancel()
+	conn, err := grpc.DialContext(ctx,
+		instanceAddr, grpc.WithInsecure(),
+	)
+	//conn, err := grpc.Dial(instanceAddr, grpc.WithInsecure())
 	if err != nil {
 		return nil, nil, err
 	}
@@ -46,7 +54,13 @@ func SumEndpointFactory(instanceAddr string) (endpoint.Endpoint, io.Closer, erro
 }
 
 func ConcatEndpointFactory(instanceAddr string) (endpoint.Endpoint, io.Closer, error) {
-	conn, err := grpc.Dial(instanceAddr, grpc.WithInsecure())
+	ctx, cancel := context.WithTimeout(context.Background(),
+		10000*time.Millisecond)
+	defer cancel()
+	conn, err := grpc.DialContext(ctx,
+		instanceAddr, grpc.WithInsecure(),
+	)
+	//conn, err := grpc.Dial(instanceAddr, grpc.WithInsecure())
 	if err != nil {
 		return nil, nil, err
 	}
