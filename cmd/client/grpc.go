@@ -18,11 +18,8 @@ import (
 
 func NewAddService() addsrv.AddService {
 	//etcd sd start
-	ctx, cancel := context.WithTimeout(context.Background(),
-		3*time.Second)
-	defer cancel()
 	etcdServer := "127.0.0.1:2379"
-	client, err := etcdv3.NewClient(ctx, []string{etcdServer}, etcdv3.ClientOptions{})
+	client, err := etcdv3.NewClient(context.Background(), []string{etcdServer}, etcdv3.ClientOptions{})
 	if err != nil {
 		panic(err)
 	}
