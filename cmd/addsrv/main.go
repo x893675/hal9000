@@ -1,18 +1,38 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"github.com/go-kit/kit/log"
+	"github.com/go-kit/kit/sd/etcdv3"
 	"google.golang.org/grpc"
 	"hal9000/internal/addsrv"
 	"hal9000/pb"
+	"hal9000/pkg/addr"
 	"net"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
+)
+
+var (
+	//etcd服务地址
+	etcdServer = "etcd:2379"
+	//服务的信息目录
+	prefix = "/hal9000/"
+	//当前启动服务实例的地址
+	instance = "127.0.0.1:50052"
+	//服务实例注册的路径
+	key = prefix + instance
+	//服务实例注册的val
+	value = instance
+	ctx   = context.Background()
+	//服务监听地址
+	serviceAddress = ":8891"
 )
 
 func main()  {
@@ -36,6 +56,36 @@ func main()  {
 		SumEndpoint:    addsrv.MakeSumEndpoint(svc),
 		ConcatEndpoint: addsrv.MakeConcatEndpoint(svc),
 	}
+
+	//etcd服务注册 START
+	var host, port string
+	var err error
+	if cnt := strings.Count(*gRPCAddr, ":"); cnt >= 1 {
+		// ipv6 address in format [host]:port or ipv4 host:port
+		host, port, err = net.SplitHostPort(*gRPCAddr)
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		host = *gRPCAddr
+	}
+	ipAddr, err := addr.Extract(host)
+	if err != nil {
+		panic(err)
+	}
+	gaddr := addr.HostPort(ipAddr, port)
+	logger.Log("gaddr", gaddr)
+	client, err := etcdv3.NewClient(ctx, []string{etcdServer}, etcdv3.ClientOptions{})
+	if err != nil {
+		panic(err)
+	}
+	register := etcdv3.NewRegistrar(client,etcdv3.Service{
+		Key: "/hal9000/addsrv/",
+		Value: gaddr,
+	},logger)
+	register.Register()
+	defer register.Deregister()
+	//etcd服务注册 END
 
 	errc := make(chan error)
 	go func() {

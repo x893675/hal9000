@@ -1,0 +1,18 @@
+version: '3'
+services:
+  etcd:
+    image: 'bitnami/etcd:latest'
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+    ports:
+      - 2379:2379
+      - 2380:2380
+  addsrv:
+    build:
+      context: .
+      dockerfile: "build/addsrv/Dockerfile"
+    depends_on:
+      - etcd
+    ports:
+      - "8890:8890"
+      - "8891:8891"
