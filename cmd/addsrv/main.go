@@ -2,83 +2,55 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
-	"github.com/go-kit/kit/log"
-	"github.com/go-kit/kit/sd/etcdv3"
-	"github.com/google/uuid"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
+	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
+	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"google.golang.org/grpc"
-	"hal9000/internal/addsrv"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"hal9000/pb"
-	"hal9000/pkg/addr"
+	"log"
 	"net"
-	"net/http"
 	"os"
 	"os/signal"
-	"strings"
+	"runtime/debug"
 	"syscall"
-	"time"
 )
 
 var (
-	//etcd服务地址
-	etcdServer = "etcd:2379"
-	ctx   = context.Background()
+	zapLogger  *zap.Logger
+	customFunc grpc_zap.CodeToLevel
 )
 
+
+type AddService struct {
+
+}
+
+
+func (a *AddService) Sum(ctx context.Context, req *pb.SumRequest) (*pb.SumReply, error) {
+	grpc_ctxtags.Extract(ctx).Set("custom_tags.string", "something").Set("custom_tags.int", 1337)
+
+	// Extract a single request-scoped zap.Logger and log messages. (containing the grpc.xxx tags)
+	l := ctxzap.Extract(ctx)
+	l.Info("some ping")
+	l.Info("another ping")
+	return &pb.SumReply{
+		V: req.A + req.B,
+	},nil
+}
+func (a *AddService) Concat(ctx context.Context, req *pb.ConcatRequest) (*pb.ConcatReply, error) {
+	return &pb.ConcatReply{
+		V: req.A + req.B,
+	},nil
+}
+
 func main()  {
-	httpAddr := flag.String("HTTP", ":8890", "HTTP server")
-	gRPCAddr := flag.String("gRPC", ":8891", "gRPC server")
-	flag.Parse()
-
-	var logger log.Logger
-	logger = log.NewLogfmtLogger(os.Stdout)
-	logger = log.With(logger, "ts", log.TimestampFormat(
-		func() time.Time { return time.Now().Local() },
-		time.RFC3339Nano,
-	))
-	logger = log.With(logger, "caller", log.DefaultCaller)
-	logger.Log("msg", "Server Start...")
-	defer logger.Log("msg", "Server Stop...")
-
-
-	svc := addsrv.New()
-	endpoints := addsrv.Endpoints{
-		SumEndpoint:    addsrv.MakeSumEndpoint(svc),
-		ConcatEndpoint: addsrv.MakeConcatEndpoint(svc),
-	}
-
-	//etcd服务注册 START
-	var host, port string
-	var err error
-	if cnt := strings.Count(*gRPCAddr, ":"); cnt >= 1 {
-		// ipv6 address in format [host]:port or ipv4 host:port
-		host, port, err = net.SplitHostPort(*gRPCAddr)
-		if err != nil {
-			panic(err)
-		}
-	} else {
-		host = *gRPCAddr
-	}
-	ipAddr, err := addr.Extract(host)
-	if err != nil {
-		panic(err)
-	}
-	gaddr := addr.HostPort(ipAddr, port)
-	logger.Log("gaddr", gaddr)
-	client, err := etcdv3.NewClient(ctx, []string{etcdServer}, etcdv3.ClientOptions{})
-	if err != nil {
-		panic(err)
-	}
-	prefix := "/hal9000/addsrv/"
-	instanceId := uuid.New().String()
-	register := etcdv3.NewRegistrar(client,etcdv3.Service{
-		Key: prefix + "node-" + instanceId,
-		Value: gaddr,
-	},logger)
-	register.Register()
-	defer register.Deregister()
-	//etcd服务注册 END
 
 	errc := make(chan error)
 	go func() {
@@ -88,25 +60,44 @@ func main()  {
 	}()
 
 	go func() {
-		logger := log.With(logger, "transport", "HTTP")
-		logger.Log("addr", *httpAddr)
-		handle := addsrv.MakeHTTPHandler(endpoints)
-		errc <- http.ListenAndServe(*httpAddr, handle)
-	}()
-
-	go func() {
-		logger := log.With(logger, "transport", "GRPC")
-		logger.Log("addr", *gRPCAddr)
-		listener, err := net.Listen("tcp", *gRPCAddr)
-		if err != nil {
-			errc <- err
-			return
+		//zapOpts := 	[]grpc_zap.Option{
+		//	grpc_zap.WithLevels(customFunc),
+		//}
+		cfg := zap.NewDevelopmentConfig()
+		cfg.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+		zapLogger,_ = cfg.Build(zap.AddCallerSkip(2))
+		opts := []grpc.ServerOption{
+			grpc_middleware.WithUnaryServerChain(
+				grpc_recovery.UnaryServerInterceptor(),
+				grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
+				//grpc_zap.UnaryServerInterceptor(zapLogger, zapOpts...),
+				grpc_zap.UnaryServerInterceptor(zapLogger)),
 		}
-		srv := addsrv.MakeGRPCServer(endpoints)
-		s:= grpc.NewServer()
-		pb.RegisterAddServer(s, srv)
-		errc <- s.Serve(listener)
+		server := grpc.NewServer(opts...)
+		pb.RegisterAddServer(server, &AddService{})
+		listener, err := net.Listen("tcp", ":8891")
+		if err != nil {
+			log.Fatal(err)
+		}
+		errc <- server.Serve(listener)
+	}()
+	log.Println(<-errc)
+}
+
+func LoggingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	log.Printf("gRPC method: %s, %v", info.FullMethod, req)
+	resp, err := handler(ctx, req)
+	log.Printf("gRPC method: %s, %v", info.FullMethod, resp)
+	return resp, err
+}
+
+func RecoveryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			debug.PrintStack()
+			err = status.Errorf(codes.Internal, "Panic err: %v", e)
+		}
 	}()
 
-	logger.Log("exit", <-errc)
+	return handler(ctx, req)
 }

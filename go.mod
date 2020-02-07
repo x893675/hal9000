@@ -10,11 +10,11 @@ require (
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
 	github.com/go-kit/kit v0.9.0
 	github.com/go-logfmt/logfmt v0.5.0 // indirect
-	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/protobuf v1.3.3
-	github.com/google/uuid v1.1.1
+	github.com/google/uuid v1.1.1 // indirect
+	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	go.etcd.io/etcd v3.3.18+incompatible // indirect
-	go.uber.org/zap v1.13.0 // indirect
+	go.uber.org/zap v1.13.0
 	google.golang.org/grpc v1.26.0
 )
