@@ -2,19 +2,14 @@ module hal9000
 
 go 1.13
 
-replace github.com/coreos/go-systemd => github.com/coreos/go-systemd/v22 v22.0.0
-
 require (
-	github.com/coreos/etcd v3.3.18+incompatible // indirect
-	github.com/coreos/go-systemd v0.0.0-00010101000000-000000000000 // indirect
-	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
-	github.com/go-kit/kit v0.9.0
-	github.com/go-logfmt/logfmt v0.5.0 // indirect
-	github.com/gogo/protobuf v1.3.1 // indirect
+	github.com/fatih/structs v1.1.0
+	github.com/gogo/gateway v1.1.0
+	github.com/gogo/googleapis v1.3.2
+	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.3.3
-	github.com/google/uuid v1.1.1 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
-	go.etcd.io/etcd v3.3.18+incompatible // indirect
-	go.uber.org/zap v1.13.0
-	google.golang.org/grpc v1.26.0
+	github.com/grpc-ecosystem/grpc-gateway v1.12.2
+	github.com/mwitkow/go-proto-validators v0.3.0
+	google.golang.org/grpc v1.27.1
 )
