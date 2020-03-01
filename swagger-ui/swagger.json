@@ -1,0 +1,118 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "api server OpenAPI",
+    "title": "api server",
+    "contact": {
+      "name": "api server",
+      "url": "http://localhost:8080",
+      "email": "x893675@gmail.com"
+    },
+    "license": {
+      "name": "Apache",
+      "url": "http://www.apache.org/licenses/"
+    },
+    "version": "1.0.0",
+    "x-taggroups": [
+      {
+        "name": "Resources",
+        "tags": [
+          "Test Go-Restful"
+        ]
+      }
+    ]
+  },
+  "paths": {
+    "/api/resources.io/v1/testrestful/{resources}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Test Go-Restful"
+        ],
+        "summary": "test restful query",
+        "operationId": "TestRestful",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "namespace level resource type, e.g. pods,jobs,configmaps,services.",
+            "name": "resources",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "format": "key=%s,key~%s",
+            "description": "query conditions,connect multiple conditions with commas, equal symbol for exact query, wave symbol for fuzzy query e.g. name~a",
+            "name": "conditions",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "format": "limit=%d,page=%d",
+            "default": "limit=10,page=1",
+            "description": "paging query, e.g. limit=100,page=1",
+            "name": "paging",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "sort parameters, e.g. reverse=true",
+            "name": "reverse",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "sort parameters, e.g. orderBy=createTime",
+            "name": "orderBy",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "$ref": "#/definitions/schema.PageableResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "schema.PageableResponse": {
+      "required": [
+        "items",
+        "total_count"
+      ],
+      "properties": {
+        "items": {
+          "description": "paging data",
+          "$ref": "#/definitions/schema.PageableResponse.items"
+        },
+        "total_count": {
+          "description": "total count",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "schema.PageableResponse.items": {}
+  },
+  "securityDefinitions": {
+    "jwt": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "jwt": []
+    }
+  ]
+}

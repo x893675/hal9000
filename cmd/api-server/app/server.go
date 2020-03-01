@@ -11,19 +11,18 @@ import (
 	serverconfig "hal9000/pkg/server/config"
 	"hal9000/pkg/server/filter"
 	"hal9000/pkg/server/runtime"
+	"hal9000/pkg/server/version"
 	"hal9000/pkg/utils/signals"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"net/http"
 )
 
 func NewAPIServerCommand() *cobra.Command {
-	s  := options.NewServerRunOptions()
+	s := options.NewServerRunOptions()
 
 	cmd := &cobra.Command{
-		Use: "api-server",
-		Long: `The KubeSphere API server validates and configures data for the api objects. 
-The API Server services REST operations and provides the frontend to the
-cluster's shared state through which all other components interact.`,
+		Use:  "api-server",
+		Long: `restful api server`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			err := serverconfig.Load()
 			if err != nil {
@@ -65,7 +64,7 @@ func Complete(s *options.ServerRunOptions) error {
 
 	*s = options.ServerRunOptions{
 		GenericServerRunOptions: s.GenericServerRunOptions,
-		MySQLOptions: conf.MySQLOptions,
+		MySQLOptions:            conf.MySQLOptions,
 	}
 
 	return nil
@@ -110,8 +109,8 @@ func CreateAPIServer(s *options.ServerRunOptions) error {
 	// install config api
 	serverconfig.InstallAPI(container)
 
-	logger.Info(nil, "Server listening on insecure port %d.", s.GenericServerRunOptions.InsecurePort)
 	if s.GenericServerRunOptions.InsecurePort != 0 {
+		logger.Info(nil, "Server [version: %s] Start on %s:%d", version.Version, s.GenericServerRunOptions.BindAddress, s.GenericServerRunOptions.InsecurePort)
 		err = http.ListenAndServe(fmt.Sprintf("%s:%d", s.GenericServerRunOptions.BindAddress, s.GenericServerRunOptions.InsecurePort), container)
 		if err == nil {
 			logger.Info(nil, "Server listening on insecure port %d.", s.GenericServerRunOptions.InsecurePort)

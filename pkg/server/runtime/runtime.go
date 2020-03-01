@@ -2,7 +2,6 @@ package runtime
 
 import (
 	"github.com/emicklei/go-restful"
-	"hal9000/pkg/server/runtime/schema"
 )
 
 const (
@@ -22,7 +21,7 @@ func init() {
 	restful.RegisterEntityAccessor(MimeJsonPatchJson, restful.NewEntityAccessorJSON(restful.MIME_JSON))
 }
 
-func NewWebService(gv schema.GroupVersion) *restful.WebService {
+func NewWebService(gv GroupVersion) *restful.WebService {
 	webservice := restful.WebService{}
 	webservice.Path(ApiRootPath + "/" + gv.String()).
 		Consumes(restful.MIME_JSON).
@@ -46,7 +45,6 @@ func (cb *ContainerBuilder) Register(funcs ...func(*restful.Container) error) {
 	}
 }
 
-
 func NewContainerBuilder(funcs ...func(*restful.Container) error) ContainerBuilder {
 	var cb ContainerBuilder
 	cb.Register(funcs...)
@@ -54,4 +52,9 @@ func NewContainerBuilder(funcs ...func(*restful.Container) error) ContainerBuild
 	return cb
 }
 
-
+// Must panics on non-nil errors.  Useful to handling programmer level errors.
+func Must(err error) {
+	if err != nil {
+		panic(err)
+	}
+}

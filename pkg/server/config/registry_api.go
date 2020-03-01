@@ -3,14 +3,13 @@ package config
 import (
 	"github.com/emicklei/go-restful"
 	"hal9000/pkg/server/runtime"
-	"hal9000/pkg/server/runtime/schema"
 	"net/http"
 	"reflect"
 	"strings"
 )
 
 func InstallAPI(c *restful.Container) {
-	ws := runtime.NewWebService(schema.GroupVersion{
+	ws := runtime.NewWebService(runtime.GroupVersion{
 		Group:   "",
 		Version: "v1",
 	})

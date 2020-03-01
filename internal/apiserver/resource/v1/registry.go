@@ -4,23 +4,21 @@ import (
 	"github.com/emicklei/go-restful"
 	"github.com/emicklei/go-restful-openapi"
 	"hal9000/internal/apiserver/controller/resources"
-	"hal9000/pkg/models"
+	"hal9000/pkg/logger"
+	"hal9000/pkg/schema"
 	"hal9000/pkg/server/params"
 	"hal9000/pkg/server/runtime"
-	"hal9000/pkg/server/runtime/schema"
 	"net/http"
 )
 
 const GroupName = "resources.io"
 
-var GroupVersion = schema.GroupVersion{Group: GroupName, Version: "v1"}
-
+var GroupVersion = runtime.GroupVersion{Group: GroupName, Version: "v1"}
 
 var (
 	WebServiceBuilder = runtime.NewContainerBuilder(addWebService)
 	AddToContainer    = WebServiceBuilder.AddToContainer
 )
-
 
 func addWebService(c *restful.Container) error {
 	webservice := runtime.NewWebService(GroupVersion)
@@ -41,7 +39,11 @@ func addWebService(c *restful.Container) error {
 			DefaultValue("limit=10,page=1")).
 		Param(webservice.QueryParameter(params.ReverseParam, "sort parameters, e.g. reverse=true")).
 		Param(webservice.QueryParameter(params.OrderByParam, "sort parameters, e.g. orderBy=createTime")).
-		Returns(http.StatusOK, ok, models.PageableResponse{}))
+		Returns(http.StatusOK, ok, schema.PageableResponse{}))
+
+	for _, route := range webservice.Routes() {
+		logger.Debug(nil, "%s         %s", route.Method, route.Path)
+	}
 
 	c.Add(webservice)
 	return nil

@@ -1,4 +1,4 @@
-package schema
+package runtime
 
 
 // GroupVersion contains the "group" and the "version", which uniquely identifies the API.

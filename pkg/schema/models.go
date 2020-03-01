@@ -1,4 +1,5 @@
-package models
+package schema
+
 
 type PageableResponse struct {
 	Items      interface{} `json:"items" description:"paging data"`
