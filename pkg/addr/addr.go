@@ -152,3 +152,8 @@ func HostPort(addr string, port interface{}) string {
 
 	return fmt.Sprintf("%s:%v", host, port)
 }
+
+
+func IsValidPort(port int) bool {
+	return port > 0 && port < 65535
+}

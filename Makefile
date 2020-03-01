@@ -1,5 +1,5 @@
 GOPATH ?= $(shell go env GOPATH)
-apps = 'user'
+apps = 'api-server'
 
 .PHONY: build
 build:
