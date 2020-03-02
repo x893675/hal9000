@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"hal9000/pkg/client/ldap"
+	"hal9000/pkg/client/mysql"
 	"hal9000/pkg/client/redis"
 	"hal9000/pkg/logger"
-	"hal9000/pkg/server/config/mysql"
 )
 
 const (
@@ -24,8 +24,8 @@ var (
 
 type Config struct {
 	MySQLOptions *mysql.MySQLOptions `json:"mysql,omitempty" yaml:"mysql,omitempty" mapstructure:"mysql"`
-	LdapOptions  *ldap.LdapOptions   `json:"ldap,omitempty" yaml:"ldap,omitempty" mapstructure:"ldap"`
-	RedisOptions *redis.RedisOptions `json:"redis,omitempty" yaml:"redis,omitempty" mapstructure:"redis"`
+	LdapOptions  *ldap.LdapOptions    `json:"ldap,omitempty" yaml:"ldap,omitempty" mapstructure:"ldap"`
+	RedisOptions *redis.RedisOptions  `json:"redis,omitempty" yaml:"redis,omitempty" mapstructure:"redis"`
 }
 
 func newConfig() *Config {

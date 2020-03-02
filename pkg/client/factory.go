@@ -2,9 +2,10 @@ package client
 
 import (
 	"fmt"
+	goredis "github.com/go-redis/redis"
 	"hal9000/pkg/client/ldap"
+	"hal9000/pkg/client/mysql"
 	"hal9000/pkg/client/redis"
-	"hal9000/pkg/server/config/mysql"
 	"sync"
 )
 
@@ -19,16 +20,16 @@ func (e ClientSetNotEnabledError) Error() string {
 var mutex sync.Mutex
 
 type ClientSetOptions struct {
-	mySQLOptions        *mysql.MySQLOptions
-	redisOptions        *redis.RedisOptions
-	ldapOptions         *ldap.LdapOptions
+	mySQLOptions *mysql.MySQLOptions
+	redisOptions *redis.RedisOptions
+	ldapOptions  *ldap.LdapOptions
 }
 
 func NewClientSetOptions() *ClientSetOptions {
 	return &ClientSetOptions{
-		mySQLOptions:        mysql.NewMySQLOptions(),
-		redisOptions:        redis.NewRedisOptions(),
-		ldapOptions:         ldap.NewLdapOptions(),
+		mySQLOptions: mysql.NewMySQLOptions(),
+		redisOptions: redis.NewRedisOptions(),
+		ldapOptions:  ldap.NewLdapOptions(),
 	}
 }
 
@@ -55,9 +56,8 @@ type ClientSet struct {
 	stopCh    <-chan struct{}
 
 	//mySQLClient *mysql.MySQLClient
-	ldapClient          *ldap.LdapClient
-	//redisClient         *redis.RedisClient
-
+	ldapClient  *ldap.LdapClient
+	redisClient *redis.RedisClient
 }
 
 // global clientsets instance
@@ -66,7 +66,6 @@ var sharedClientSet *ClientSet
 func ClientSets() *ClientSet {
 	return sharedClientSet
 }
-
 
 func NewClientSetFactory(c *ClientSetOptions, stopCh <-chan struct{}) *ClientSet {
 	sharedClientSet = &ClientSet{csoptions: c, stopCh: stopCh}
@@ -94,5 +93,28 @@ func (cs *ClientSet) Ldap() (*ldap.LdapClient, error) {
 			}
 		}
 		return cs.ldapClient, nil
+	}
+}
+
+func (cs *ClientSet) Redis() (*goredis.Client, error) {
+	var err error
+
+	if cs.csoptions.redisOptions == nil || cs.csoptions.redisOptions.RedisURL == "" {
+		return nil, ClientSetNotEnabledError{}
+	}
+
+	if cs.redisClient != nil {
+		return cs.redisClient.Redis(), nil
+	} else {
+		mutex.Lock()
+		defer mutex.Unlock()
+		if cs.redisClient == nil {
+			cs.redisClient, err = redis.NewRedisClient(cs.csoptions.redisOptions, cs.stopCh)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		return cs.redisClient.Redis(), nil
 	}
 }

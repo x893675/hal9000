@@ -43,6 +43,7 @@ func NewAPIServerCommand() *cobra.Command {
 	}
 
 	fs := cmd.Flags()
+	fs.StringVar(&s.Loglevel, "loglevel", s.Loglevel, "info server log level, e.g. debug,info")
 	namedFlagSets := s.Flags()
 
 	for _, f := range namedFlagSets.FlagSets {
@@ -65,13 +66,14 @@ func Complete(s *options.ServerRunOptions) error {
 	*s = options.ServerRunOptions{
 		GenericServerRunOptions: s.GenericServerRunOptions,
 		MySQLOptions:            conf.MySQLOptions,
+		Loglevel:                s.Loglevel,
 	}
 
 	return nil
 }
 
 func Run(s *options.ServerRunOptions, stopCh <-chan struct{}) error {
-
+	logger.SetLevelByString(s.Loglevel)
 	err := CreateClientSet(serverconfig.Get(), stopCh)
 	if err != nil {
 		return err
