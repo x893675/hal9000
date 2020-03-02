@@ -4,6 +4,7 @@ import (
 	"github.com/emicklei/go-restful"
 	"github.com/emicklei/go-restful-openapi"
 	"hal9000/internal/apiserver/controller/resources"
+	"hal9000/pkg/constants"
 	"hal9000/pkg/logger"
 	"hal9000/pkg/schema"
 	"hal9000/pkg/server/params"
@@ -27,7 +28,7 @@ func addWebService(c *restful.Container) error {
 
 	webservice.Route(webservice.GET("/testrestful/{resources}").
 		To(resources.TestRestful).
-		Metadata(restfulspec.KeyOpenAPITags, []string{"Test Go-Restful"}).
+		Metadata(restfulspec.KeyOpenAPITags, []string{constants.TestResourcesTag}).
 		Doc("test restful query").
 		Param(webservice.PathParameter("resources", "namespace level resource type, e.g. pods,jobs,configmaps,services.")).
 		Param(webservice.QueryParameter(params.ConditionsParam, "query conditions,connect multiple conditions with commas, equal symbol for exact query, wave symbol for fuzzy query e.g. name~a").

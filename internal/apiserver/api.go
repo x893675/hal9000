@@ -7,7 +7,6 @@ import (
 )
 
 
-
 func InstallAPIs(container *restful.Container) {
 	runtime.Must(resourcev1.AddToContainer(container))
 }

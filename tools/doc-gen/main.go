@@ -9,6 +9,7 @@ import (
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/go-openapi/spec"
 	_ "hal9000/internal/apiserver/resource/install"
+	"hal9000/pkg/constants"
 	"hal9000/pkg/server/runtime"
 	"io/ioutil"
 	"log"
@@ -44,7 +45,7 @@ func generateSwaggerJson() {
 	}{
 		{
 			Name: "Resources",
-			Tags: []string{"Test Go-Restful"},
+			Tags: []string{constants.TestResourcesTag},
 		},
 	})
 
@@ -63,7 +64,7 @@ func enrichSwaggerObject(swo *spec.Swagger) {
 			Description: "api server OpenAPI",
 			Contact: &spec.ContactInfo{
 				Name:  "api server",
-				Email: "x893675@gmail.com",
+				Email: "example@example.com",
 				URL:   "http://localhost:8080",
 			},
 			License: &spec.License{

@@ -14,3 +14,7 @@ build:
 .PHONY: swagger
 swagger:
 	go run tools/doc-gen/main.go --output=swagger-ui/swagger.json
+
+.PHONY: swagger-server
+swagger-server:
+	go run swagger-ui/swagger.go
