@@ -3,7 +3,7 @@ package apiserver
 import (
 	"github.com/emicklei/go-restful"
 	resourcev1 "hal9000/internal/apiserver/resource/v1"
-	"hal9000/pkg/server/runtime"
+	"hal9000/pkg/httpserver/runtime"
 )
 
 

@@ -2,10 +2,10 @@ package resources
 
 import (
 	"github.com/emicklei/go-restful"
+	"hal9000/pkg/httpserver/errors"
+	"hal9000/pkg/httpserver/params"
 	"hal9000/pkg/logger"
 	"hal9000/pkg/schema"
-	"hal9000/pkg/server/errors"
-	"hal9000/pkg/server/params"
 	"net/http"
 )
 

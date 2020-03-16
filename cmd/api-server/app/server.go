@@ -6,12 +6,12 @@ import (
 	"hal9000/cmd/api-server/app/options"
 	"hal9000/internal/apiserver"
 	"hal9000/pkg/client"
+	"hal9000/pkg/httpserver"
+	serverconfig "hal9000/pkg/httpserver/config"
+	"hal9000/pkg/httpserver/filter"
+	"hal9000/pkg/httpserver/runtime"
+	"hal9000/pkg/httpserver/version"
 	"hal9000/pkg/logger"
-	"hal9000/pkg/server"
-	serverconfig "hal9000/pkg/server/config"
-	"hal9000/pkg/server/filter"
-	"hal9000/pkg/server/runtime"
-	"hal9000/pkg/server/version"
 	"hal9000/pkg/utils/signals"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"net/http"
@@ -104,7 +104,7 @@ func CreateAPIServer(s *options.ServerRunOptions) error {
 	container := runtime.Container
 	container.DoNotRecover(false)
 	container.Filter(filter.Logging)
-	container.RecoverHandler(server.LogStackOnRecover)
+	container.RecoverHandler(httpserver.LogStackOnRecover)
 
 	apiserver.InstallAPIs(container)
 

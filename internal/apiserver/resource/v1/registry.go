@@ -5,10 +5,10 @@ import (
 	"github.com/emicklei/go-restful-openapi"
 	"hal9000/internal/apiserver/controller/resources"
 	"hal9000/pkg/constants"
+	"hal9000/pkg/httpserver/params"
+	"hal9000/pkg/httpserver/runtime"
 	"hal9000/pkg/logger"
 	"hal9000/pkg/schema"
-	"hal9000/pkg/server/params"
-	"hal9000/pkg/server/runtime"
 	"net/http"
 )
 

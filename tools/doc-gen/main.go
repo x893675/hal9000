@@ -10,7 +10,7 @@ import (
 	"github.com/go-openapi/spec"
 	_ "hal9000/internal/apiserver/resource/install"
 	"hal9000/pkg/constants"
-	"hal9000/pkg/server/runtime"
+	"hal9000/pkg/httpserver/runtime"
 	"io/ioutil"
 	"log"
 )

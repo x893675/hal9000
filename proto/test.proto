@@ -1,0 +1,105 @@
+syntax = "proto3";
+package hal9000;
+
+// set go package name to pb
+option go_package = "pb";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+
+service Test {
+    // Get users, filter with fields(user_id, email, phone_number, status), default return all users
+    rpc DescribeUsers (DescribeUsersRequest) returns (DescribeUsersResponse) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+			summary: "Get users, filter with fields(user_id, email, phone_number, status), default return all users"
+		};
+        option (google.api.http) = { get: "/v1/users" };
+    };
+
+    // Create user, if user have admin permission
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+			summary: "Create user, if user have admin permission"
+		};
+        option (google.api.http) = { post: "/v1/users" body: "*" };
+    };
+}
+
+message DescribeUsersRequest {
+    // query key, support these fields(user_id, email, phone_number, status)
+    google.protobuf.StringValue search_word = 1;
+    // sort key, order by sort_key, default create_time
+    google.protobuf.StringValue sort_key = 2;
+    // value = 0 sort ASC, value = 1 sort DESC
+    google.protobuf.BoolValue reverse = 3;
+    // data limit, default 20, max 200
+    uint32 limit = 4;
+    // data offset, default 0
+    uint32 offset = 5;
+
+    // use root group ids to get all group ids
+    repeated string root_group_id = 6;
+    // group ids
+    repeated string group_id = 7;
+    // user ids
+    repeated string user_id = 8;
+    // status eg.[active|deleted]
+    repeated string status = 9;
+    // role ids
+    repeated string role_id = 10;
+    // username
+    repeated string username = 11;
+    // email, eg.op@yunify.com
+    repeated string email = 12;
+    // phone number, string of 11 digital
+    repeated string phone_number = 13;
+}
+
+message DescribeUsersResponse {
+    // total count of qualified user
+    uint32 total_count = 1;
+    // list of user
+    repeated User user_set = 2;
+}
+
+message User {
+    // user id, user belong to different group and role, has different permissions
+    google.protobuf.StringValue user_id = 1;
+    // user name
+    google.protobuf.StringValue username = 2;
+    // user email
+    google.protobuf.StringValue email = 3;
+    // user phone number
+    google.protobuf.StringValue phone_number = 4;
+    // user description
+    google.protobuf.StringValue description = 5;
+    // user status eg.[active|deleted]
+    google.protobuf.StringValue status = 6;
+    // the time when user create
+    google.protobuf.Timestamp create_time = 7;
+    // the time when user update
+    google.protobuf.Timestamp update_time = 8;
+    // record changed time of status
+    google.protobuf.Timestamp status_time = 9;
+}
+
+message CreateUserRequest {
+    // required, user email
+    google.protobuf.StringValue email = 1;
+    // user phone number
+    google.protobuf.StringValue phone_number = 2;
+    // required, user password
+    google.protobuf.StringValue password = 3;
+    // required, user role_id
+    google.protobuf.StringValue role_id = 4;
+    // user description
+    google.protobuf.StringValue description = 5;
+}
+
+message CreateUserResponse {
+    // id of user created
+    google.protobuf.StringValue user_id = 1;
+}

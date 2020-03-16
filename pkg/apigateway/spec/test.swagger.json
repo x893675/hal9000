@@ -1,0 +1,286 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "test.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/users": {
+      "get": {
+        "summary": "Get users, filter with fields(user_id, email, phone_number, status), default return all users",
+        "operationId": "DescribeUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/hal9000DescribeUsersResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "search_word",
+            "description": "query key, support these fields(user_id, email, phone_number, status).",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort_key",
+            "description": "sort key, order by sort_key, default create_time.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "reverse",
+            "description": "value = 0 sort ASC, value = 1 sort DESC.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          },
+          {
+            "name": "limit",
+            "description": "data limit, default 20, max 200.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "offset",
+            "description": "data offset, default 0.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "root_group_id",
+            "description": "use root group ids to get all group ids.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "group_id",
+            "description": "group ids.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "user_id",
+            "description": "user ids.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "status",
+            "description": "status eg.[active|deleted].",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "role_id",
+            "description": "role ids.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "username",
+            "description": "username.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "email",
+            "description": "email, eg.op@yunify.com.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "phone_number",
+            "description": "phone number, string of 11 digital.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Test"
+        ]
+      },
+      "post": {
+        "summary": "Create user, if user have admin permission",
+        "operationId": "CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/hal9000CreateUserResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hal9000CreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Test"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "hal9000CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "required, user email"
+        },
+        "phone_number": {
+          "type": "string",
+          "title": "user phone number"
+        },
+        "password": {
+          "type": "string",
+          "title": "required, user password"
+        },
+        "role_id": {
+          "type": "string",
+          "title": "required, user role_id"
+        },
+        "description": {
+          "type": "string",
+          "title": "user description"
+        }
+      }
+    },
+    "hal9000CreateUserResponse": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "title": "id of user created"
+        }
+      }
+    },
+    "hal9000DescribeUsersResponse": {
+      "type": "object",
+      "properties": {
+        "total_count": {
+          "type": "integer",
+          "format": "int64",
+          "title": "total count of qualified user"
+        },
+        "user_set": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hal9000User"
+          },
+          "title": "list of user"
+        }
+      }
+    },
+    "hal9000User": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "title": "user id, user belong to different group and role, has different permissions"
+        },
+        "username": {
+          "type": "string",
+          "title": "user name"
+        },
+        "email": {
+          "type": "string",
+          "title": "user email"
+        },
+        "phone_number": {
+          "type": "string",
+          "title": "user phone number"
+        },
+        "description": {
+          "type": "string",
+          "title": "user description"
+        },
+        "status": {
+          "type": "string",
+          "title": "user status eg.[active|deleted]"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "date-time",
+          "title": "the time when user create"
+        },
+        "update_time": {
+          "type": "string",
+          "format": "date-time",
+          "title": "the time when user update"
+        },
+        "status_time": {
+          "type": "string",
+          "format": "date-time",
+          "title": "record changed time of status"
+        }
+      }
+    }
+  }
+}

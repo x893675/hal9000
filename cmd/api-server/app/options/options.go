@@ -2,7 +2,7 @@ package options
 
 import (
 	"hal9000/pkg/client/mysql"
-	genericoptions "hal9000/pkg/server/options"
+	genericoptions "hal9000/pkg/httpserver/options"
 	cliflag "k8s.io/component-base/cli/flag"
 )
 
