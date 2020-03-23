@@ -8,7 +8,7 @@ VERSION ?= $(shell git rev-parse --short HEAD)-$(shell date -u '+%Y%m%d%I%M%S')
 build:
 	for app in $(apps) ;\
 	do \
-		CGO_ENABLED=0 go build -mod vendor -o dist/$$app -a -ldflags "-w -s -X hal9000/pkg/server/version.Version=${VERSION}" ./cmd/$$app;\
+		CGO_ENABLED=0 go build -mod vendor -o dist/$$app -a -ldflags "-w -s -X hal9000/pkg/version.Version=${VERSION}" ./cmd/$$app;\
 	done
 
 .PHONY: swagger

@@ -10,9 +10,9 @@ import (
 	serverconfig "hal9000/pkg/httpserver/config"
 	"hal9000/pkg/httpserver/filter"
 	"hal9000/pkg/httpserver/runtime"
-	"hal9000/pkg/httpserver/version"
 	"hal9000/pkg/logger"
 	"hal9000/pkg/utils/signals"
+	"hal9000/pkg/version"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"net/http"
 )
