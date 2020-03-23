@@ -67,7 +67,7 @@ message DescribeUsersResponse {
 
 message User {
     // user id, user belong to different group and role, has different permissions
-    google.protobuf.StringValue user_id = 1;
+    google.protobuf.StringValue user_id = 1 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {description: "user id", default: "111", required: ['string_value']}];
     // user name
     google.protobuf.StringValue username = 2;
     // user email

@@ -4,8 +4,8 @@ package constants
 
 const (
 	prefix = "hal9000"
-	TestServiceHost = prefix + "test-service"
-
+	//TestServiceHost = prefix + "test-service"
+	TestServiceHost = "localhost"
 )
 
 const (
