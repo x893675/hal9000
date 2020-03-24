@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496
+	github.com/caddyserver/caddy v1.0.5
 	github.com/emicklei/go-restful v2.11.2+incompatible
 	github.com/emicklei/go-restful-openapi v1.3.0
 	github.com/fatih/structs v1.1.0
@@ -16,7 +17,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
 	github.com/grpc-ecosystem/grpc-gateway v1.9.0
 	github.com/json-iterator/go v1.1.9 // indirect
-	github.com/pkg/errors v0.8.0
+	github.com/pkg/errors v0.8.1
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.2
