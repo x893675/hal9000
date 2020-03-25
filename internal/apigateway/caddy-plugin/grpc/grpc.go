@@ -3,6 +3,7 @@ package grpc
 import (
 	"github.com/caddyserver/caddy/caddyhttp/httpserver"
 	"hal9000/internal/apigateway/caddy-plugin/internal"
+	"hal9000/pkg/logger"
 	"net/http"
 )
 
@@ -13,7 +14,6 @@ type RpcProxy struct {
 
 type Rule struct {
 	Path           string
-	URL            string
 	Handler        http.Handler
 	ExclusionRules []internal.ExclusionRule
 }
@@ -25,7 +25,8 @@ func (r RpcProxy) ServeHTTP(resp http.ResponseWriter, req *http.Request) (int, e
 		}
 	}
 
-	if httpserver.Path(req.URL.Path).Matches(r.Rule.URL) {
+	if httpserver.Path(req.URL.Path).Matches(r.Rule.Path) {
+		logger.Info(nil, "request url is %v", req.URL.Path)
 		r.Rule.Handler.ServeHTTP(resp, req)
 		return http.StatusOK, nil
 	}

@@ -19,7 +19,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/users": {
+    "/iam.io/v1/users": {
       "get": {
         "summary": "Get users, filter with fields(user_id, email, phone_number, status), default return all users",
         "operationId": "DescribeUsers",
@@ -189,7 +189,7 @@
         ]
       }
     },
-    "/v1/users/{user_id}": {
+    "/iam.io/v1/users/{user_id}": {
       "get": {
         "summary": "get user",
         "operationId": "GetUser",

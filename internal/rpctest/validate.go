@@ -10,11 +10,15 @@ func (p *Server) Checker(ctx context.Context, req interface{}) error {
 	switch r:= req.(type) {
 	case *pb.DescribeUsersRequest:
 		return rpc.NewChecker(ctx, r).
-			Required("email").
+			Required().
 			Exec()
 	case *pb.CreateUserRequest:
 		return rpc.NewChecker(ctx, r).
 			Required().
+			Exec()
+	case *pb.GetUserRequest:
+		return rpc.NewChecker(ctx,r).
+			Required("user_id").
 			Exec()
 	}
 	return nil

@@ -1,10 +1,9 @@
 :2018 {
   root /home
   grpcproxy {
-    path /
-    url /
-    service-registry-addr etcd:2379
+    path /capi
     except * /swagger
+    except * /capi/resource.io
   }
   log / stdout "{remote} {when} {method} {uri} {proto} {status} {size} {latency_ms}ms"
 }

@@ -52,7 +52,7 @@ func Setup(c *caddy.Controller) error {
 }
 
 func parse(c *caddy.Controller) (*Rule, error) {
-	rule := &Rule{URL: "/"}
+	rule := &Rule{}
 
 	if c.Next() {
 		args := c.RemainingArgs()
@@ -66,16 +66,6 @@ func parse(c *caddy.Controller) (*Rule, error) {
 					}
 
 					rule.Path = c.Val()
-
-					if c.NextArg() {
-						return nil, c.ArgErr()
-					}
-				case "url":
-					if !c.NextArg() {
-						return nil, c.ArgErr()
-					}
-
-					rule.URL = c.Val()
 
 					if c.NextArg() {
 						return nil, c.ArgErr()

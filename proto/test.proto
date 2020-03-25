@@ -16,7 +16,7 @@ service Test {
         option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
 			summary: "Get users, filter with fields(user_id, email, phone_number, status), default return all users"
 		};
-        option (google.api.http) = { get: "/v1/users" };
+        option (google.api.http) = { get: "/capi/iam.io/v1/users" };
     };
 
     // Create user, if user have admin permission
@@ -24,7 +24,7 @@ service Test {
         option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
 			summary: "Create user, if user have admin permission"
 		};
-        option (google.api.http) = { post: "/v1/users" body: "*" };
+        option (google.api.http) = { post: "/capi/iam.io/v1/users" body: "*" };
     };
 
     //Get user
@@ -32,7 +32,7 @@ service Test {
         option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
 			summary: "get user"
 		};
-        option (google.api.http) = { get: "/v1/users/{user_id}"};
+        option (google.api.http) = { get: "/capi/iam.io/v1/users/{user_id}"};
     }
 }
 
