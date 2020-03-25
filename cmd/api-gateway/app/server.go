@@ -3,6 +3,7 @@ package app
 import (
 	"flag"
 	"github.com/spf13/cobra"
+	"hal9000/internal/apigateway"
 	"hal9000/pkg/client"
 	serverconfig "hal9000/pkg/httpserver/config"
 	"github.com/caddyserver/caddy/caddy/caddymain"
@@ -21,7 +22,7 @@ func NewAPIGatewayCommand() *cobra.Command {
 				return err
 			}
 
-			api_gateway.RegisterPlugins()
+			apigateway.RegisterPlugins()
 
 			return Run(signals.SetupSignalHandler())
 		},
@@ -38,7 +39,7 @@ func Run(stopCh <-chan struct{}) error {
 
 	client.NewClientSetFactory(csop, stopCh)
 
-	httpserver.RegisterDevDirective("authenticate", "jwt")
+	httpserver.RegisterDevDirective("grpcproxy", "jwt")
 	//httpserver.RegisterDevDirective("authorize", "jwt")
 	//httpserver.RegisterDevDirective("audit", "jwt")
 	//httpserver.RegisterDevDirective("swagger", "jwt")

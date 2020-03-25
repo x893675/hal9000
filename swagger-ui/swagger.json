@@ -188,6 +188,41 @@
           "Test"
         ]
       }
+    },
+    "/v1/users/{user_id}": {
+      "get": {
+        "summary": "get user",
+        "operationId": "GetUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/hal9000User"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": "user id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "float_value",
+            "description": "Float value field",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "float",
+            "default": "0.2"
+          }
+        ],
+        "tags": [
+          "Test"
+        ]
+      }
     }
   },
   "definitions": {

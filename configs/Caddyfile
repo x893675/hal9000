@@ -1,0 +1,10 @@
+:2018 {
+  root /home
+  grpcproxy {
+    path /
+    url /
+    service-registry-addr etcd:2379
+    except * /swagger
+  }
+  log / stdout "{remote} {when} {method} {uri} {proto} {status} {size} {latency_ms}ms"
+}

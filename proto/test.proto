@@ -26,6 +26,14 @@ service Test {
 		};
         option (google.api.http) = { post: "/v1/users" body: "*" };
     };
+
+    //Get user
+    rpc GetUser(GetUserRequest) returns (User) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+			summary: "get user"
+		};
+        option (google.api.http) = { get: "/v1/users/{user_id}"};
+    }
 }
 
 message DescribeUsersRequest {
@@ -63,6 +71,15 @@ message DescribeUsersResponse {
     uint32 total_count = 1;
     // list of user
     repeated User user_set = 2;
+}
+
+message GetUserRequest {
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_schema) = {
+			example: { value: '{ "user_id": "22" }' }
+    };
+    // user id
+    string user_id = 1 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}", description: "user id", min_length: 1}];
+    float float_value = 2 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {description: "Float value field", default: "0.2"}];
 }
 
 message User {

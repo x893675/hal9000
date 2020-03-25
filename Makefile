@@ -1,6 +1,6 @@
 GOPATH ?= $(shell go env GOPATH)
 
-apps = 'api-server' 'rpctest' 'grpc-gateway'
+apps = 'api-server' 'rpctest' 'grpc-gateway' 'api-gateway'
 
 VERSION ?= $(shell git rev-parse --short HEAD)-$(shell date -u '+%Y%m%d%I%M%S')
 

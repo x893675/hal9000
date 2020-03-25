@@ -6,7 +6,7 @@ import (
 )
 
 func RegisterPlugins() {
-	caddy.RegisterPlugin("swagger", caddy.Plugin{
+	caddy.RegisterPlugin("grpcproxy", caddy.Plugin{
 		ServerType: "http",
 		Action:     grpc.Setup,
 	})
