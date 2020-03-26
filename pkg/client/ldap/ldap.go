@@ -13,7 +13,7 @@ type LdapClient struct {
 
 // panic if cannot connect to ldap service
 func NewLdapClient(options *LdapOptions, stopCh <-chan struct{}) (*LdapClient, error) {
-	pool, err := NewChannelPool(8, 64, "kubesphere", func(s string) (ldap.Client, error) {
+	pool, err := NewChannelPool(8, 64, "hal9000", func(s string) (ldap.Client, error) {
 		conn, err := ldap.Dial("tcp", options.Host)
 		if err != nil {
 			return nil, err

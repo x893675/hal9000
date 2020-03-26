@@ -3,8 +3,8 @@ package client
 import (
 	"fmt"
 	goredis "github.com/go-redis/redis"
+	"hal9000/pkg/client/database"
 	"hal9000/pkg/client/ldap"
-	"hal9000/pkg/client/mysql"
 	"hal9000/pkg/client/redis"
 	"sync"
 )
@@ -20,21 +20,21 @@ func (e ClientSetNotEnabledError) Error() string {
 var mutex sync.Mutex
 
 type ClientSetOptions struct {
-	mySQLOptions *mysql.MySQLOptions
-	redisOptions *redis.RedisOptions
-	ldapOptions  *ldap.LdapOptions
+	databaseOptions *database.DatabaseOptions
+	redisOptions    *redis.RedisOptions
+	ldapOptions     *ldap.LdapOptions
 }
 
 func NewClientSetOptions() *ClientSetOptions {
 	return &ClientSetOptions{
-		mySQLOptions: mysql.NewMySQLOptions(),
-		redisOptions: redis.NewRedisOptions(),
-		ldapOptions:  ldap.NewLdapOptions(),
+		databaseOptions: database.NewDatabaseOptions(),
+		redisOptions:    redis.NewRedisOptions(),
+		ldapOptions:     ldap.NewLdapOptions(),
 	}
 }
 
-func (c *ClientSetOptions) SetMySQLOptions(options *mysql.MySQLOptions) *ClientSetOptions {
-	c.mySQLOptions = options
+func (c *ClientSetOptions) SetDatabaseOptions(options *database.DatabaseOptions) *ClientSetOptions {
+	c.databaseOptions = options
 	return c
 }
 
@@ -55,7 +55,7 @@ type ClientSet struct {
 	csoptions *ClientSetOptions
 	stopCh    <-chan struct{}
 
-	//mySQLClient *mysql.MySQLClient
+	database    *database.Database
 	ldapClient  *ldap.LdapClient
 	redisClient *redis.RedisClient
 }
@@ -116,5 +116,28 @@ func (cs *ClientSet) Redis() (*goredis.Client, error) {
 		}
 
 		return cs.redisClient.Redis(), nil
+	}
+}
+
+func (cs *ClientSet) Database() (*database.Database, error) {
+	var err error
+
+	if cs.csoptions.databaseOptions == nil || cs.csoptions.databaseOptions.Host == "" {
+		return nil, ClientSetNotEnabledError{}
+	}
+
+	if cs.database != nil {
+		return cs.database, nil
+	} else {
+		mutex.Lock()
+		defer mutex.Unlock()
+
+		if cs.database == nil {
+			cs.database, err = database.NewDataBase(cs.csoptions.databaseOptions, cs.stopCh)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return cs.database, nil
 	}
 }

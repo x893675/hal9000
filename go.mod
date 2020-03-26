@@ -12,6 +12,8 @@ require (
 	github.com/go-ldap/ldap/v3 v3.1.7
 	github.com/go-openapi/spec v0.0.0-20180415031709-bcff419492ee
 	github.com/go-redis/redis v6.15.7+incompatible
+	github.com/go-sql-driver/mysql v1.5.0
+	github.com/gocraft/dbr/v2 v2.7.0
 	github.com/golang/protobuf v1.3.3
 	github.com/google/uuid v1.1.1
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
