@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496
 	github.com/caddyserver/caddy v1.0.5
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/emicklei/go-restful v2.11.2+incompatible
 	github.com/emicklei/go-restful-openapi v1.3.0
 	github.com/fatih/structs v1.1.0

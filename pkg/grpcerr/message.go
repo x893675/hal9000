@@ -33,4 +33,12 @@ var (
 		Name: "unsupported_parameter_value",
 		en:   "unsupported parameter [%s] value [%s]",
 	}
+	ErrorAuthRateLimitExceed = ErrorMessage{
+		Name: "auth_rate_limit_exceed",
+		en:   "auth rate limit exceeded, max [%s], current [%s]",
+	}
+	ErrorAuthFailure = ErrorMessage{
+		Name: "auth_failure",
+		en:   "auth failure",
+	}
 )

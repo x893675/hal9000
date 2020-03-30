@@ -2,8 +2,8 @@ package app
 
 import (
 	"github.com/spf13/cobra"
-	"hal9000/cmd/account/app/options"
-	"hal9000/internal/account"
+	"hal9000/cmd/auth/app/options"
+	"hal9000/internal/auth"
 	"hal9000/pkg/client"
 	serverconfig "hal9000/pkg/httpserver/config"
 	"hal9000/pkg/logger"
@@ -11,12 +11,12 @@ import (
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 )
 
-func NewAccountServiceCommand() *cobra.Command {
-	s := options.NewAccountServiceOptions()
+func NewAuthServiceCommand() *cobra.Command {
+	s := options.NewAuthServiceOptions()
 
 	cmd := &cobra.Command{
-		Use:  "account-service",
-		Long: `account service`,
+		Use:  "auth-service",
+		Long: `auth service`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			err := serverconfig.Load()
 			if err != nil {
@@ -47,7 +47,7 @@ func NewAccountServiceCommand() *cobra.Command {
 }
 
 // apply server run options to configuration
-func Complete(s *options.AccountServiceOptions) error {
+func Complete(s *options.AuthServiceOptions) error {
 
 	// loading configuration file
 	conf := serverconfig.Get()
@@ -56,7 +56,7 @@ func Complete(s *options.AccountServiceOptions) error {
 		DatabaseOptions: s.DatabaseOptions,
 	})
 
-	*s = options.AccountServiceOptions{
+	*s = options.AuthServiceOptions{
 		DatabaseOptions: conf.DatabaseOptions,
 		Loglevel:        s.Loglevel,
 	}
@@ -64,7 +64,7 @@ func Complete(s *options.AccountServiceOptions) error {
 	return nil
 }
 
-func Run(s *options.AccountServiceOptions, stopCh <-chan struct{}) error {
+func Run(s *options.AuthServiceOptions, stopCh <-chan struct{}) error {
 	logger.SetLevelByString(s.Loglevel)
 	err := CreateClientSet(serverconfig.Get(), stopCh)
 	if err != nil {
@@ -90,7 +90,7 @@ func CreateClientSet(conf *serverconfig.Config, stopCh <-chan struct{}) error {
 	return nil
 }
 
-func CreateAccountService(s *options.AccountServiceOptions) error {
-	account.Serve()
+func CreateAccountService(s *options.AuthServiceOptions) error {
+	auth.Serve()
 	return nil
 }

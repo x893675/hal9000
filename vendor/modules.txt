@@ -47,6 +47,8 @@ github.com/caddyserver/caddy/telemetry
 github.com/cenkalti/backoff/v3
 # github.com/cheekybits/genny v1.0.0
 github.com/cheekybits/genny/generic
+# github.com/dgrijalva/jwt-go v3.2.0+incompatible
+github.com/dgrijalva/jwt-go
 # github.com/dustin/go-humanize v1.0.0
 github.com/dustin/go-humanize
 # github.com/emicklei/go-restful v2.11.2+incompatible
@@ -60,13 +62,6 @@ github.com/fatih/structs
 github.com/flynn/go-shlex
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
-# github.com/gin-contrib/sse v0.1.0
-github.com/gin-contrib/sse
-# github.com/gin-gonic/gin v1.5.0
-github.com/gin-gonic/gin
-github.com/gin-gonic/gin/binding
-github.com/gin-gonic/gin/internal/json
-github.com/gin-gonic/gin/render
 # github.com/go-acme/lego/v3 v3.2.0
 github.com/go-acme/lego/v3/acme
 github.com/go-acme/lego/v3/acme/api
@@ -96,11 +91,6 @@ github.com/go-openapi/jsonreference
 github.com/go-openapi/spec
 # github.com/go-openapi/swag v0.0.0-20180405201759-811b1089cde9
 github.com/go-openapi/swag
-# github.com/go-playground/locales v0.12.1
-github.com/go-playground/locales
-github.com/go-playground/locales/currency
-# github.com/go-playground/universal-translator v0.16.0
-github.com/go-playground/universal-translator
 # github.com/go-redis/redis v6.15.7+incompatible
 github.com/go-redis/redis
 github.com/go-redis/redis/internal
@@ -167,8 +157,6 @@ github.com/jimstudt/http-authentication/basic
 github.com/json-iterator/go
 # github.com/klauspost/cpuid v1.2.0
 github.com/klauspost/cpuid
-# github.com/leodido/go-urn v1.1.0
-github.com/leodido/go-urn
 # github.com/lucas-clemente/quic-go v0.13.1
 github.com/lucas-clemente/quic-go
 github.com/lucas-clemente/quic-go/http3
@@ -195,8 +183,6 @@ github.com/marten-seemann/chacha20/internal/subtle
 github.com/marten-seemann/qpack
 # github.com/marten-seemann/qtls v0.4.1
 github.com/marten-seemann/qtls
-# github.com/mattn/go-isatty v0.0.9
-github.com/mattn/go-isatty
 # github.com/mholt/certmagic v0.8.3
 github.com/mholt/certmagic
 # github.com/miekg/dns v1.1.15
@@ -252,8 +238,6 @@ github.com/spf13/pflag
 github.com/spf13/viper
 # github.com/subosito/gotenv v1.2.0
 github.com/subosito/gotenv
-# github.com/ugorji/go/codec v1.1.7
-github.com/ugorji/go/codec
 # golang.org/x/crypto v0.0.0-20190911031432-227b76d455e7
 golang.org/x/crypto/chacha20poly1305
 golang.org/x/crypto/cryptobyte
@@ -336,8 +320,6 @@ google.golang.org/grpc/status
 google.golang.org/grpc/tap
 # gopkg.in/fsnotify.v1 v1.4.7
 gopkg.in/fsnotify.v1
-# gopkg.in/go-playground/validator.v9 v9.29.1
-gopkg.in/go-playground/validator.v9
 # gopkg.in/ini.v1 v1.51.0
 gopkg.in/ini.v1
 # gopkg.in/natefinch/lumberjack.v2 v2.0.0

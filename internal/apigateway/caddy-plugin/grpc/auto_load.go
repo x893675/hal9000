@@ -22,6 +22,10 @@ import (
 	"strings"
 )
 
+const (
+	RequestIdKey = "X-Request-Id"
+)
+
 type register struct {
 	f        func(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error)
 	endpoint string
@@ -126,7 +130,9 @@ func parse(c *caddy.Controller) (*Rule, error) {
 func NewHandle() http.Handler {
 	var gwmux = runtime.NewServeMux(
 		runtime.WithMetadata(func(ctx context.Context, req *http.Request) metadata.MD {
-			return metadata.Pairs()
+			logger.Info(ctx, "request id is [%v]", req.Header.Get("x-request-id"))
+			logger.Info(ctx, "request id is [%v]", req.Header.Get("X-Request-Id"))
+			return metadata.Pairs(RequestIdKey, req.Header.Get(RequestIdKey),)
 		}),
 	)
 	var opts = rpc.ClientOptions
@@ -136,6 +142,10 @@ func NewHandle() http.Handler {
 		{
 			pb.RegisterAccountHandlerFromEndpoint,
 			fmt.Sprintf("%s:%d", constants.AccountServiceHost, constants.AccountServicePort),
+		},
+		{
+			pb.RegisterAuthHandlerFromEndpoint,
+			fmt.Sprintf("%s:%d", constants.AuthServiceHost, constants.AuthServicePort),
 		},
 	} {
 		err = r.f(context.Background(), gwmux, r.endpoint, opts)

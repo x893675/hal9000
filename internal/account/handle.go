@@ -4,12 +4,16 @@ import (
 	"context"
 	"hal9000/pkg/logger"
 	"hal9000/pkg/pb"
+	"hal9000/pkg/utils/ctxutils"
 	"hal9000/pkg/utils/pbutil"
 )
 
-func (a *AccountService) DescribeUsers(context.Context, *pb.DescribeUsersRequest) (*pb.DescribeUsersResponse, error) {
-	logger.Info(nil, "in DescribeUsers")
-	logger.Info(nil, "")
+func (a *AccountService) DescribeUsers(ctx context.Context, req *pb.DescribeUsersRequest) (*pb.DescribeUsersResponse, error) {
+	requestId := ctxutils.GetRequestId(ctx)
+	logger.Info(ctx, "request id is [%v]", requestId)
+
+	logger.Info(ctx, "in DescribeUsers")
+	logger.Info(ctx, "")
 	reply := &pb.DescribeUsersResponse{
 		TotalCount: 1,
 		Users: []*pb.User{

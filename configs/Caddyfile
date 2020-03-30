@@ -1,5 +1,8 @@
 :2018 {
   root /home
+  requestid {
+    key X-Request-Id
+  }
   grpcproxy {
     path /capi
     except * /swagger

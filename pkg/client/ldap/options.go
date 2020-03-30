@@ -17,8 +17,8 @@ func NewLdapOptions() *LdapOptions {
 	return &LdapOptions{
 		Host:            "",
 		ManagerDN:       "cn=admin,dc=example,dc=org",
-		UserSearchBase:  "ou=Users,dc=example,dc=org",
-		GroupSearchBase: "ou=Groups,dc=example,dc=org",
+		UserSearchBase:  "ou=users,dc=example,dc=org",
+		GroupSearchBase: "ou=groups,dc=example,dc=org",
 	}
 }
 

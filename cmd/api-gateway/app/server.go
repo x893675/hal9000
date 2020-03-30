@@ -39,6 +39,7 @@ func Run(stopCh <-chan struct{}) error {
 
 	client.NewClientSetFactory(csop, stopCh)
 
+	httpserver.RegisterDevDirective("requestid", "header")
 	httpserver.RegisterDevDirective("grpcproxy", "jwt")
 	//httpserver.RegisterDevDirective("authorize", "jwt")
 	//httpserver.RegisterDevDirective("audit", "jwt")

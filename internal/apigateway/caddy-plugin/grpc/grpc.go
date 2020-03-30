@@ -27,6 +27,8 @@ func (r RpcProxy) ServeHTTP(resp http.ResponseWriter, req *http.Request) (int, e
 
 	if httpserver.Path(req.URL.Path).Matches(r.Rule.Path) {
 		logger.Info(nil, "request url is %v", req.URL.Path)
+		logger.Info(nil, "request id is [%v]", req.Header.Get("x-request-id"))
+		logger.Info(nil, "request id is [%v]", req.Header.Get("X-Request-ID"))
 		r.Rule.Handler.ServeHTTP(resp, req)
 		return http.StatusOK, nil
 	}
