@@ -10,30 +10,63 @@ import "google/api/annotations.proto";
 import "protoc-gen-swagger/options/annotations.proto";
 
 
-service Test {
+service Account {
     // Get users, filter with fields(user_id, email, phone_number, status), default return all users
     rpc DescribeUsers (DescribeUsersRequest) returns (DescribeUsersResponse) {
         option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
-			summary: "Get users, filter with fields(user_id, email, phone_number, status), default return all users"
+			summary: "Get users, filter with fields(user_id, email, phone_number, status), default return all users";
+            tags: "Account";
 		};
         option (google.api.http) = { get: "/capi/iam.io/v1/users" };
     };
 
     // Create user, if user have admin permission
-    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
-        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
-			summary: "Create user, if user have admin permission"
-		};
-        option (google.api.http) = { post: "/capi/iam.io/v1/users" body: "*" };
-    };
+//    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+//        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+//			summary: "Create user, if user have admin permission";
+//            tags: "Account";
+//		};
+//        option (google.api.http) = { post: "/capi/iam.io/v1/users" body: "*" };
+//    };
 
     //Get user
-    rpc GetUser(GetUserRequest) returns (User) {
-        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
-			summary: "get user"
-		};
-        option (google.api.http) = { get: "/capi/iam.io/v1/users/{user_id}"};
-    }
+//    rpc GetUser(GetUserRequest) returns (User) {
+//        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+//			summary: "get user";
+//            tags: "Account";
+//		};
+//        option (google.api.http) = { get: "/capi/iam.io/v1/users/{user_id}"};
+//    }
+}
+
+
+
+message User {
+    // user id, user belong to different group and role, has different permissions
+    google.protobuf.StringValue user_id = 1 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {description: "user id", default: "111", required: ['string_value']}];
+    // user name
+    google.protobuf.StringValue username = 2;
+    // user email
+    google.protobuf.StringValue email = 3;
+    // user phone number
+    google.protobuf.StringValue phone_number = 4;
+    // user description
+    google.protobuf.StringValue description = 5;
+    // user creator
+    google.protobuf.StringValue creator = 6;
+    // user status eg.[0|1]
+    google.protobuf.Int32Value status = 7;
+    // the time when user create
+    google.protobuf.Timestamp create_time = 8;
+    // the time when user update
+    google.protobuf.Timestamp update_time = 9;
+    // user roles
+    repeated UserRole roles = 10;
+}
+
+message UserRole {
+    // user role name
+    string role_name = 1;
 }
 
 message DescribeUsersRequest {
@@ -70,7 +103,7 @@ message DescribeUsersResponse {
     // total count of qualified user
     uint32 total_count = 1;
     // list of user
-    repeated User user_set = 2;
+    repeated User users = 2;
 }
 
 message GetUserRequest {
@@ -82,34 +115,13 @@ message GetUserRequest {
     float float_value = 2 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {description: "Float value field", default: "0.2"}];
 }
 
-message User {
-    // user id, user belong to different group and role, has different permissions
-    google.protobuf.StringValue user_id = 1 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {description: "user id", default: "111", required: ['string_value']}];
-    // user name
-    google.protobuf.StringValue username = 2;
-    // user email
-    google.protobuf.StringValue email = 3;
-    // user phone number
-    google.protobuf.StringValue phone_number = 4;
-    // user description
-    google.protobuf.StringValue description = 5;
-    // user status eg.[active|deleted]
-    google.protobuf.StringValue status = 6;
-    // the time when user create
-    google.protobuf.Timestamp create_time = 7;
-    // the time when user update
-    google.protobuf.Timestamp update_time = 8;
-    // record changed time of status
-    google.protobuf.Timestamp status_time = 9;
-}
-
 message CreateUserRequest {
     // required, user email
     google.protobuf.StringValue email = 1;
     // user phone number
     google.protobuf.StringValue phone_number = 2;
     // required, user password
-    google.protobuf.StringValue password = 3;
+    google.protobuf.StringValue password = 3 [(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {description: "user password", default: "111"}];
     // required, user role_id
     google.protobuf.StringValue role_id = 4;
     // user description

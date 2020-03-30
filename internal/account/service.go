@@ -1,4 +1,4 @@
-package rpctest
+package account
 
 import (
 	"google.golang.org/grpc"
@@ -7,17 +7,16 @@ import (
 	"hal9000/pkg/rpc"
 )
 
-type Server struct {
-
+type AccountService struct {
 }
 
 func Serve() {
-	s := Server{}
-	rpc.NewGrpcServer("test-service", constants.TestServicePort).
+	s := AccountService{}
+	rpc.NewGrpcServer("account-service", constants.AccountServicePort).
 		ShowErrorCause(true).
 		WithChecker(s.Checker).
 		WithBuilder(s.Builder).
 		Serve(func(server *grpc.Server) {
-			pb.RegisterTestServer(server, &s)
-	})
+			pb.RegisterAccountServer(server, &s)
+		})
 }

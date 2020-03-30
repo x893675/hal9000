@@ -3,8 +3,8 @@ package config
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	"hal9000/pkg/client/database"
 	"hal9000/pkg/client/ldap"
-	"hal9000/pkg/client/mysql"
 	"hal9000/pkg/client/redis"
 	"hal9000/pkg/logger"
 )
@@ -23,16 +23,16 @@ var (
 )
 
 type Config struct {
-	MySQLOptions *mysql.MySQLOptions `json:"mysql,omitempty" yaml:"mysql,omitempty" mapstructure:"mysql"`
-	LdapOptions  *ldap.LdapOptions    `json:"ldap,omitempty" yaml:"ldap,omitempty" mapstructure:"ldap"`
-	RedisOptions *redis.RedisOptions  `json:"redis,omitempty" yaml:"redis,omitempty" mapstructure:"redis"`
+	DatabaseOptions *database.DatabaseOptions `json:"mysql,omitempty" yaml:"mysql,omitempty" mapstructure:"mysql"`
+	LdapOptions     *ldap.LdapOptions         `json:"ldap,omitempty" yaml:"ldap,omitempty" mapstructure:"ldap"`
+	RedisOptions    *redis.RedisOptions       `json:"redis,omitempty" yaml:"redis,omitempty" mapstructure:"redis"`
 }
 
 func newConfig() *Config {
 	return &Config{
-		MySQLOptions: mysql.NewMySQLOptions(),
-		LdapOptions:  ldap.NewLdapOptions(),
-		RedisOptions: redis.NewRedisOptions(),
+		DatabaseOptions: database.NewDatabaseOptions(),
+		LdapOptions:     ldap.NewLdapOptions(),
+		RedisOptions:    redis.NewRedisOptions(),
 	}
 }
 
@@ -51,14 +51,14 @@ func (c *Config) Apply(conf *Config) {
 		conf.LdapOptions.ApplyTo(c.LdapOptions)
 	}
 
-	if conf.MySQLOptions != nil {
-		conf.MySQLOptions.ApplyTo(c.MySQLOptions)
+	if conf.DatabaseOptions != nil {
+		conf.DatabaseOptions.ApplyTo(c.DatabaseOptions)
 	}
 }
 
 func (c *Config) stripEmptyOptions() {
-	if c.MySQLOptions != nil && c.MySQLOptions.Host == "" {
-		c.MySQLOptions = nil
+	if c.DatabaseOptions != nil && c.DatabaseOptions.Host == "" {
+		c.DatabaseOptions = nil
 	}
 
 	if c.RedisOptions != nil && c.RedisOptions.RedisURL == "" {

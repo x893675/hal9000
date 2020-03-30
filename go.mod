@@ -8,14 +8,12 @@ require (
 	github.com/emicklei/go-restful v2.11.2+incompatible
 	github.com/emicklei/go-restful-openapi v1.3.0
 	github.com/fatih/structs v1.1.0
-	github.com/gin-gonic/gin v1.5.0
 	github.com/go-ldap/ldap/v3 v3.1.7
 	github.com/go-openapi/spec v0.0.0-20180415031709-bcff419492ee
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gocraft/dbr/v2 v2.7.0
 	github.com/golang/protobuf v1.3.3
-	github.com/google/uuid v1.1.1
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
 	github.com/grpc-ecosystem/grpc-gateway v1.9.0
 	github.com/json-iterator/go v1.1.9 // indirect

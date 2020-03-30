@@ -1,24 +1,22 @@
 package app
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
-	"hal9000/cmd/grpc-gateway/app/options"
+	"hal9000/cmd/account/app/options"
+	"hal9000/internal/account"
 	"hal9000/pkg/client"
-	"hal9000/pkg/constants"
 	serverconfig "hal9000/pkg/httpserver/config"
 	"hal9000/pkg/logger"
 	"hal9000/pkg/utils/signals"
-	"hal9000/pkg/version"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 )
 
-func NewGrpcGatewayCommand() *cobra.Command {
-	s := options.NewServerRunOptions()
+func NewAccountServiceCommand() *cobra.Command {
+	s := options.NewAccountServiceOptions()
 
 	cmd := &cobra.Command{
-		Use:  "api-server",
-		Long: `restful api server`,
+		Use:  "account-service",
+		Long: `account service`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			err := serverconfig.Load()
 			if err != nil {
@@ -50,29 +48,31 @@ func NewGrpcGatewayCommand() *cobra.Command {
 }
 
 // apply server run options to configuration
-func Complete(s *options.ServerRunOptions) error {
+func Complete(s *options.AccountServiceOptions) error {
 
 	// loading configuration file
 	conf := serverconfig.Get()
 
-	conf.Apply(&serverconfig.Config{})
+	conf.Apply(&serverconfig.Config{
+		DatabaseOptions: s.DatabaseOptions,
+	})
 
-	*s = options.ServerRunOptions{
-		GenericServerRunOptions: s.GenericServerRunOptions,
-		Loglevel:                s.Loglevel,
+	*s = options.AccountServiceOptions{
+		DatabaseOptions: conf.DatabaseOptions,
+		Loglevel:        s.Loglevel,
 	}
 
 	return nil
 }
 
-func Run(s *options.ServerRunOptions, stopCh <-chan struct{}) error {
+func Run(s *options.AccountServiceOptions, stopCh <-chan struct{}) error {
 	logger.SetLevelByString(s.Loglevel)
 	err := CreateClientSet(serverconfig.Get(), stopCh)
 	if err != nil {
 		return err
 	}
 
-	err = CreateGrpcGateway(s)
+	err = CreateAccountService(s)
 	if err != nil {
 		return err
 	}
@@ -83,7 +83,7 @@ func Run(s *options.ServerRunOptions, stopCh <-chan struct{}) error {
 func CreateClientSet(conf *serverconfig.Config, stopCh <-chan struct{}) error {
 	csop := &client.ClientSetOptions{}
 
-	csop.SetMySQLOptions(conf.MySQLOptions).
+	csop.SetDatabaseOptions(conf.DatabaseOptions).
 		SetLdapOptions(conf.LdapOptions)
 
 	client.NewClientSetFactory(csop, stopCh)
@@ -91,23 +91,7 @@ func CreateClientSet(conf *serverconfig.Config, stopCh <-chan struct{}) error {
 	return nil
 }
 
-func CreateGrpcGateway(s *options.ServerRunOptions) error {
-	var err error
-
-	if s.GenericServerRunOptions.SecurePort != 0 {
-		logger.Critical(nil, "grpc gateway run without tls")
-		return fmt.Errorf("grpc gateway run without tls")
-	}
-
-	logger.Info(nil, "Grpc gateway [version: %s] Start on %s:%d", version.Version, s.GenericServerRunOptions.BindAddress, s.GenericServerRunOptions.InsecurePort)
-	logger.Info(nil, "Test service %s:%d", constants.TestServiceHost, constants.TestServicePort)
-
-
-	gw := Server{}
-
-	if err = gw.run(s.GenericServerRunOptions.BindAddress, s.GenericServerRunOptions.InsecurePort); err != nil {
-		logger.Critical(nil, "Grpc Gateway run failed %+v", err)
-	}
-
-	return err
+func CreateAccountService(s *options.AccountServiceOptions) error {
+	account.Serve()
+	return nil
 }

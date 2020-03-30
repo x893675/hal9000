@@ -5,9 +5,9 @@ package constants
 const (
 	prefix = "hal9000"
 	//TestServiceHost = prefix + "test-service"
-	TestServiceHost = "localhost"
+	AccountServiceHost = "localhost"
 )
 
 const (
-	TestServicePort = 9101
+	AccountServicePort = 9101
 )

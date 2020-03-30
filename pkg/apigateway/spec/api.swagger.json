@@ -160,17 +160,25 @@
           }
         ],
         "tags": [
-          "Test"
+          "Account"
         ]
-      },
+      }
+    },
+    "/capi/iam.io/v1/auth/token": {
       "post": {
-        "summary": "Create user, if user have admin permission",
-        "operationId": "CreateUser",
+        "summary": "Get auth token",
+        "operationId": "GetAuthToken",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/hal9000CreateUserResponse"
+              "$ref": "#/definitions/hal9000Token"
+            }
+          },
+          "500": {
+            "description": "Returned when the server unexpected error occurred.",
+            "schema": {
+              "format": "string"
             }
           }
         },
@@ -180,86 +188,58 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/hal9000CreateUserRequest"
+              "$ref": "#/definitions/hal9000AuthRequest"
             }
           }
         ],
         "tags": [
-          "Test"
-        ]
+          "auth"
+        ],
+        "security": []
       }
     },
-    "/capi/iam.io/v1/users/{user_id}": {
-      "get": {
-        "summary": "get user",
-        "operationId": "GetUser",
+    "/capi/iam.io/v1/oauth2/token": {
+      "post": {
+        "summary": "Get Oauth token",
+        "operationId": "GetOauthToken",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/hal9000User"
+              "$ref": "#/definitions/hal9000Token"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "$ref": ".google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when the server unexpected error occurred.",
+            "schema": {
+              "format": "string"
             }
           }
         },
         "parameters": [
           {
-            "name": "user_id",
-            "description": "user id",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "float_value",
-            "description": "Float value field",
-            "in": "query",
-            "required": false,
-            "type": "number",
-            "format": "float",
-            "default": "0.2"
+            "schema": {
+              "$ref": "#/definitions/hal9000Oauth2Request"
+            }
           }
         ],
         "tags": [
-          "Test"
-        ]
+          "auth"
+        ],
+        "security": []
       }
     }
   },
   "definitions": {
-    "hal9000CreateUserRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "title": "required, user email"
-        },
-        "phone_number": {
-          "type": "string",
-          "title": "user phone number"
-        },
-        "password": {
-          "type": "string",
-          "title": "required, user password"
-        },
-        "role_id": {
-          "type": "string",
-          "title": "required, user role_id"
-        },
-        "description": {
-          "type": "string",
-          "title": "user description"
-        }
-      }
-    },
-    "hal9000CreateUserResponse": {
-      "type": "object",
-      "properties": {
-        "user_id": {
-          "type": "string",
-          "title": "id of user created"
-        }
-      }
-    },
     "hal9000DescribeUsersResponse": {
       "type": "object",
       "properties": {
@@ -268,7 +248,7 @@
           "format": "int64",
           "title": "total count of qualified user"
         },
-        "user_set": {
+        "users": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/hal9000User"
@@ -305,9 +285,14 @@
           "type": "string",
           "title": "user description"
         },
-        "status": {
+        "creator": {
           "type": "string",
-          "title": "user status eg.[active|deleted]"
+          "title": "user creator"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "title": "user status eg.[0|1]"
         },
         "create_time": {
           "type": "string",
@@ -319,10 +304,93 @@
           "format": "date-time",
           "title": "the time when user update"
         },
-        "status_time": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hal9000UserRole"
+          },
+          "title": "user roles"
+        }
+      }
+    },
+    "hal9000UserRole": {
+      "type": "object",
+      "properties": {
+        "role_name": {
           "type": "string",
-          "format": "date-time",
-          "title": "record changed time of status"
+          "title": "user role name"
+        }
+      }
+    },
+    "hal9000AuthRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "title": "required, user's name"
+        },
+        "password": {
+          "type": "string",
+          "title": "required, user's password"
+        }
+      }
+    },
+    "hal9000Oauth2Request": {
+      "type": "object",
+      "properties": {
+        "grant_type": {
+          "type": "string",
+          "title": "required, type of client request verification.eg.[client_credentials or password or refresh_token]"
+        },
+        "client_id": {
+          "type": "string",
+          "title": "required, client id"
+        },
+        "client_secret": {
+          "type": "string",
+          "title": "required, used for validate client credentials"
+        },
+        "scope": {
+          "type": "string",
+          "title": "scope"
+        },
+        "username": {
+          "type": "string",
+          "title": "required or not depend on grant_type, user's name"
+        },
+        "password": {
+          "type": "string",
+          "title": "required or not depend on grant_type, user's password"
+        },
+        "refresh_token": {
+          "type": "string",
+          "title": "required or not depend on grant_type, refresh token to check whether token expired"
+        }
+      }
+    },
+    "hal9000Token": {
+      "type": "object",
+      "properties": {
+        "token_type": {
+          "type": "string",
+          "title": "token type.eg.[bearer]"
+        },
+        "expires_in": {
+          "type": "integer",
+          "format": "int32",
+          "title": "default 2h"
+        },
+        "access_token": {
+          "type": "string",
+          "title": "access token, generator by jwt(key=secrete key)"
+        },
+        "refresh_token": {
+          "type": "string",
+          "title": "refresh token, timeliness,default expired after 2 weeks"
+        },
+        "id_token": {
+          "type": "string",
+          "title": "id token, generator by jwt(key=\"\")"
         }
       }
     }

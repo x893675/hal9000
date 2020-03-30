@@ -134,8 +134,8 @@ func NewHandle() http.Handler {
 
 	for _, r := range []register{
 		{
-			pb.RegisterTestHandlerFromEndpoint,
-			fmt.Sprintf("%s:%d", constants.TestServiceHost, constants.TestServicePort),
+			pb.RegisterAccountHandlerFromEndpoint,
+			fmt.Sprintf("%s:%d", constants.AccountServiceHost, constants.AccountServicePort),
 		},
 	} {
 		err = r.f(context.Background(), gwmux, r.endpoint, opts)

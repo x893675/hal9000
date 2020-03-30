@@ -1,12 +1,12 @@
 package main
 
 import (
-	"hal9000/cmd/rpctest/app"
+	"hal9000/cmd/account/app"
 	"log"
 )
 
 func main() {
-	cmd := app.NewTestServerCommand()
+	cmd := app.NewAccountServiceCommand()
 	if err := cmd.Execute(); err != nil {
 		log.Fatalln(err)
 	}

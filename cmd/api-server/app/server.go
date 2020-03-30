@@ -60,12 +60,12 @@ func Complete(s *options.ServerRunOptions) error {
 	conf := serverconfig.Get()
 
 	conf.Apply(&serverconfig.Config{
-		MySQLOptions: s.MySQLOptions,
+		DatabaseOptions: s.MySQLOptions,
 	})
 
 	*s = options.ServerRunOptions{
 		GenericServerRunOptions: s.GenericServerRunOptions,
-		MySQLOptions:            conf.MySQLOptions,
+		MySQLOptions:            conf.DatabaseOptions,
 		Loglevel:                s.Loglevel,
 	}
 
@@ -90,7 +90,7 @@ func Run(s *options.ServerRunOptions, stopCh <-chan struct{}) error {
 func CreateClientSet(conf *serverconfig.Config, stopCh <-chan struct{}) error {
 	csop := &client.ClientSetOptions{}
 
-	csop.SetMySQLOptions(conf.MySQLOptions).
+	csop.SetDatabaseOptions(conf.DatabaseOptions).
 		SetLdapOptions(conf.LdapOptions)
 
 	client.NewClientSetFactory(csop, stopCh)

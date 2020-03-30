@@ -1,0 +1,102 @@
+syntax = "proto3";
+package hal9000;
+
+// set go package name to pb
+option go_package = "pb";
+
+//import "google/protobuf/wrappers.proto";
+//import "google/protobuf/timestamp.proto";
+
+//import "rpc/status.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+service Auth {
+    rpc GetOauthToken (Oauth2Request) returns (Token) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+			security: {};
+            summary: "Get Oauth token";
+            tags: "auth";
+            responses: {
+                key: "404";
+                value: {
+                    description: "Returned when the resource does not exist.";
+                    schema: {
+                        json_schema: {
+                            type: OBJECT;
+                            ref: ".google.rpc.Status"
+                        }
+                    }
+                }
+            }
+            responses: {
+                key: "500";
+                value: {
+                    description: "Returned when the server unexpected error occurred.";
+                    schema: {
+                        json_schema: {
+                            type: STRING;
+                        }
+                    }
+                }
+            }
+        };
+        option (google.api.http) = { post: "/capi/iam.io/v1/oauth2/token" body: "*" };
+    }
+    rpc GetAuthToken (AuthRequest) returns (Token) {
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+			security: {};
+            summary: "Get auth token";
+            tags: "auth";
+            responses: {
+                key: "500";
+                value: {
+                    description: "Returned when the server unexpected error occurred.";
+                    schema: {
+                        json_schema: {
+                            type: STRING;
+                        }
+                    }
+                }
+            }
+        };
+        option (google.api.http) = { post: "/capi/iam.io/v1/auth/token" body: "*" };
+    }
+}
+
+message Oauth2Request {
+    // required, type of client request verification.eg.[client_credentials or password or refresh_token]
+    string grant_type = 1;
+    // required, client id
+    string client_id = 2;
+    // required, used for validate client credentials
+    string client_secret = 3;
+    // scope
+    string scope = 4;
+    // required or not depend on grant_type, user's name
+    string username = 5;
+    // required or not depend on grant_type, user's password
+    string password = 6;
+    // required or not depend on grant_type, refresh token to check whether token expired
+    string refresh_token = 7;
+}
+
+message AuthRequest {
+    // required, user's name
+    string username = 1;
+    // required, user's password
+    string password = 2;
+}
+
+message Token {
+    // token type.eg.[bearer]
+    string token_type = 1;
+    // default 2h
+    int32 expires_in = 2;
+    //access token, generator by jwt(key=secrete key)
+    string access_token = 3;
+    //refresh token, timeliness,default expired after 2 weeks
+    string refresh_token = 4;
+    //id token, generator by jwt(key="")
+    string id_token = 5;
+}

@@ -1,7 +1,7 @@
 package options
 
 import (
-	"hal9000/pkg/client/mysql"
+	"hal9000/pkg/client/database"
 	genericoptions "hal9000/pkg/httpserver/options"
 	cliflag "k8s.io/component-base/cli/flag"
 )
@@ -9,7 +9,7 @@ import (
 type ServerRunOptions struct {
 	GenericServerRunOptions *genericoptions.ServerRunOptions
 
-	MySQLOptions *mysql.MySQLOptions
+	MySQLOptions *database.DatabaseOptions
 
 	Loglevel string
 }
@@ -18,7 +18,7 @@ func NewServerRunOptions() *ServerRunOptions {
 
 	s := ServerRunOptions{
 		GenericServerRunOptions: genericoptions.NewServerRunOptions(),
-		MySQLOptions:            mysql.NewMySQLOptions(),
+		MySQLOptions:            database.NewDatabaseOptions(),
 		Loglevel:                "info",
 	}
 
