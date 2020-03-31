@@ -26,9 +26,9 @@ func NewServerRunOptions() *ServerRunOptions {
 }
 
 func (s *ServerRunOptions) Flags() (fss cliflag.NamedFlagSets) {
-
-	s.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
+	fs := fss.FlagSet("generic")
+	fs.StringVar(&s.Loglevel, "loglevel", s.Loglevel, "server log level, e.g. debug,info")
+	s.GenericServerRunOptions.AddFlags(fs)
 	s.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
-
 	return fss
 }

@@ -1,8 +1,8 @@
-package apiserver
+package kuberesource
 
 import (
 	"github.com/emicklei/go-restful"
-	resourcev1 "hal9000/internal/apiserver/resource/v1"
+	resourcev1 "hal9000/internal/kuberesource/resource/v1"
 	"hal9000/pkg/httpserver/runtime"
 )
 

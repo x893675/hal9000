@@ -2,7 +2,7 @@ package install
 
 import (
 	"github.com/emicklei/go-restful"
-	v1 "hal9000/internal/apiserver/resource/v1"
+	v1 "hal9000/internal/kuberesource/resource/v1"
 	"hal9000/pkg/httpserver/runtime"
 )
 

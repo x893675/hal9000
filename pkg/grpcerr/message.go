@@ -41,4 +41,12 @@ var (
 		Name: "auth_failure",
 		en:   "auth failure",
 	}
+	ErrorParameterShouldNotBeEmpty = ErrorMessage{
+		Name: "parameter_should_not_be_empty",
+		en:   "parameter [%s] should not be empty",
+	}
+	ErrorRefreshTokenExpired = ErrorMessage{
+		Name: "refresh_token_expired",
+		en:   "refresh token expired",
+	}
 )

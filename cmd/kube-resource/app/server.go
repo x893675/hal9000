@@ -3,8 +3,8 @@ package app
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"hal9000/cmd/api-server/app/options"
-	"hal9000/internal/apiserver"
+	"hal9000/cmd/kube-resource/app/options"
+	"hal9000/internal/kuberesource"
 	"hal9000/pkg/client"
 	"hal9000/pkg/httpserver"
 	serverconfig "hal9000/pkg/httpserver/config"
@@ -17,12 +17,12 @@ import (
 	"net/http"
 )
 
-func NewAPIServerCommand() *cobra.Command {
+func NewKubeResourceServerCommand() *cobra.Command {
 	s := options.NewServerRunOptions()
 
 	cmd := &cobra.Command{
-		Use:  "api-server",
-		Long: `restful api server`,
+		Use:  "kube-resource",
+		Long: `kubernetes intergration server for middle platform`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			err := serverconfig.Load()
 			if err != nil {
@@ -43,7 +43,6 @@ func NewAPIServerCommand() *cobra.Command {
 	}
 
 	fs := cmd.Flags()
-	fs.StringVar(&s.Loglevel, "loglevel", s.Loglevel, "info server log level, e.g. debug,info")
 	namedFlagSets := s.Flags()
 
 	for _, f := range namedFlagSets.FlagSets {
@@ -106,7 +105,7 @@ func CreateAPIServer(s *options.ServerRunOptions) error {
 	container.Filter(filter.Logging)
 	container.RecoverHandler(httpserver.LogStackOnRecover)
 
-	apiserver.InstallAPIs(container)
+	kuberesource.InstallAPIs(container)
 
 	// install config api
 	serverconfig.InstallAPI(container)

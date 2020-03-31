@@ -8,7 +8,7 @@ import (
 	"github.com/emicklei/go-restful"
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/go-openapi/spec"
-	_ "hal9000/internal/apiserver/resource/install"
+	_ "hal9000/internal/kuberesource/resource/install"
 	"hal9000/pkg/constants"
 	"hal9000/pkg/httpserver/runtime"
 	"io/ioutil"

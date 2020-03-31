@@ -4,6 +4,9 @@ import (
 	"context"
 	"github.com/dgrijalva/jwt-go"
 	"hal9000/internal/auth/authentication"
+	"hal9000/internal/auth/models/entity"
+	"hal9000/pkg/constants"
+	"hal9000/pkg/logger"
 	"hal9000/pkg/pb"
 	"time"
 )
@@ -118,7 +121,62 @@ func Login(ctx context.Context, username, password, ip string) (*pb.Token, error
 	}, nil
 }
 
-//oauth client credential model
-func ClientCredentialGrant() {
+func GetUserClient(ctx context.Context, clientId, clientSecret string) (*entity.UserClient, error) {
+	logger.Info(ctx, "client id [%v], client secret [%v]", clientId, clientSecret)
+	return &entity.UserClient{
+		ClientId:     clientId,
+		ClientSecret: clientSecret,
+		UserId:       "hal9000",
+		Status:       constants.StatusActive,
+		CreateTime:   time.Now(),
+		UpdateTime:   time.Now(),
+	}, nil
+}
 
+func GetClientTokenByRefreshToken(ctx context.Context, refreshToken string) (*entity.ClientToken, error) {
+	logger.Info(ctx, "refresh token [%v]", refreshToken)
+	return &entity.ClientToken{
+		TokenId:      "testtokenid",
+		ClientId:     "clientid",
+		RefreshToken: "refreshtoken",
+		Scope:        "all",
+		UserId:       "hal9000",
+		Status:       constants.StatusActive,
+		CreateTime:   time.Now(),
+		UpdateTime:   time.Now(),
+	}, nil
+}
+
+func GetClientTokenClientId(ctx context.Context, clientId, userId, scope string) (*entity.ClientToken, error) {
+	//logger.Info(ctx, "refresh token [%v]", refreshToken)
+	//return &entity.ClientToken{
+	//	TokenId:      "testtokenid",
+	//	ClientId:     "clientid",
+	//	RefreshToken: "refreshtoken",
+	//	Scope:        "all",
+	//	UserId:       "hal9000",
+	//	Status:       constants.StatusActive,
+	//	CreateTime:   time.Now(),
+	//	UpdateTime:   time.Now(),
+	//}, nil
+	return nil, nil
+}
+
+func CreateClientToken(ctx context.Context, clientId, userId, scope string)(*entity.ClientToken, error){
+	return &entity.ClientToken{
+		TokenId:      "tokenid",
+		ClientId:     clientId,
+		RefreshToken: "refreshtoken",
+		Scope:        scope,
+		UserId:       userId,
+		Status:       constants.StatusActive,
+		CreateTime:   time.Now(),
+		UpdateTime:   time.Now(),
+	}, nil
+}
+
+//oauth client credential model
+func ClientCredentialGrant() (*pb.Token, error) {
+	//TODO: verify client id and client secret
+	return nil, nil
 }

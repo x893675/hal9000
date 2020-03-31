@@ -74,26 +74,6 @@ func parse(c *caddy.Controller) (*Rule, error) {
 					if c.NextArg() {
 						return nil, c.ArgErr()
 					}
-				//case "auth-service-name":
-				//	if !c.NextArg() {
-				//		return nil, c.ArgErr()
-				//	}
-				//
-				//	rule.AuthServiceName = c.Val()
-				//
-				//	if c.NextArg() {
-				//		return nil, c.ArgErr()
-				//	}
-				//case "service-registry-addr":
-				//	if !c.NextArg() {
-				//		return nil, c.ArgErr()
-				//	}
-				//
-				//	rule.ServiceRegistryAddr = c.Val()
-				//
-				//	if c.NextArg() {
-				//		return nil, c.ArgErr()
-				//	}
 				case "except":
 
 					if !c.NextArg() {

@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	ApiRootPath = "/api"
+	ApiRootPath = "/capi"
 )
 
 // container holds all webservice of apiserver

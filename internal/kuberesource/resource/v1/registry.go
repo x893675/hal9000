@@ -3,7 +3,7 @@ package v1
 import (
 	"github.com/emicklei/go-restful"
 	"github.com/emicklei/go-restful-openapi"
-	"hal9000/internal/apiserver/controller/resources"
+	"hal9000/internal/kuberesource/controller/resources"
 	"hal9000/pkg/constants"
 	"hal9000/pkg/httpserver/params"
 	"hal9000/pkg/httpserver/runtime"
