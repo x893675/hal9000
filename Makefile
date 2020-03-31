@@ -13,7 +13,10 @@ build:
 
 .PHONY: swagger
 swagger:
-	go run tools/doc-gen/main.go --output=swagger-ui/swagger.json
+	go run tools/doc-gen/main.go --output=pkg/apigateway/spec/resource.swagger.json
+	cd proto && make generate
+	cd pkg/apigateway/spec/ && find . | grep .swagger.json | grep -v "api" | xargs rm
+	cp pkg/apigateway/spec/api.swagger.json swagger-ui/swagger.json
 
 .PHONY: swagger-server
 swagger-server:
